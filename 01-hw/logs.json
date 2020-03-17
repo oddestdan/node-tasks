@@ -1,0 +1,35 @@
+{
+  "logs": [
+    {
+      "id": 1,
+      "year": 2018,
+      "month": 1,
+      "day": 3
+    },
+    {
+      "method": "POST",
+      "url": "/test_url",
+      "time": 4192049124
+    },
+    {
+      "method": "POST",
+      "url": "/test_url",
+      "time": 30023.136098102077
+    },
+    {
+      "method": "POST",
+      "url": "/test_url",
+      "time": 97581.65979082337
+    },
+    {
+      "method": "POST",
+      "url": "/test_url",
+      "time": 89298.28119604802
+    },
+    {
+      "method": "POST",
+      "url": "/some/mock/url",
+      "time": 57043.27192494021
+    }
+  ]
+}
