@@ -16,13 +16,9 @@ const logData = request => {
   const onReadFile = (err, fileData) => {
     if (!err) {
       const parsedData = JSON.parse(fileData);
+      const { method, url, headers } = request;
 
-      parsedData.logs.push({
-        method: 'POST',
-        url: '/some/mock/url',
-        time: Math.random() * 100000
-      });
-
+      parsedData.logs.push({ method, url, headers });
       const updatedData = JSON.stringify(parsedData, null, 2);
 
       updateFile(updatedData);
@@ -31,7 +27,7 @@ const logData = request => {
     }
   };
 
-  fs.readFile(logFile, 'utf8', onReadFile.bind(null, request));
+  fs.readFile(logFile, 'utf8', onReadFile);
 };
 
 module.exports = { logData };
