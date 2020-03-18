@@ -1,29 +1,99 @@
 {
   "logs": [
     {
-      "method": "POST",
-      "url": "/",
-      "time": 1584544717851
+      "method": "GET",
+      "url": "/logs",
+      "time": 1584547153456
     },
     {
       "method": "GET",
-      "url": "/",
-      "time": 1584544732843
+      "url": "/logs?start=1584547153456&end=1584547184508",
+      "time": 1584560166376
     },
     {
-      "method": "PUT",
-      "url": "/",
-      "time": 1584544734600
+      "method": "GET",
+      "url": "/logs?start=1584547153456&end=1584547184508",
+      "time": 1584560182806
     },
     {
-      "method": "PATCH",
+      "method": "GET",
+      "url": "/logs",
+      "time": 1584560283079
+    },
+    {
+      "method": "POST",
       "url": "/",
-      "time": 1584544736573
+      "time": 1584560287522
     },
     {
       "method": "DELETE",
       "url": "/",
-      "time": 1584544738311
+      "time": 1584560289918
+    },
+    {
+      "method": "GET",
+      "url": "/",
+      "time": 1584560292294
+    },
+    {
+      "method": "GET",
+      "url": "/logs?start=1584560166376&end=1584560287522",
+      "time": 1584560306780
+    },
+    {
+      "method": "GET",
+      "url": "/logs",
+      "time": 1584560821472
+    },
+    {
+      "method": "PATCH",
+      "url": "/",
+      "time": 1584560861168
+    },
+    {
+      "method": "GET",
+      "url": "/logs",
+      "time": 1584560862426
+    },
+    {
+      "method": "GET",
+      "url": "/logs?start=1584560166376&end=1584560861168",
+      "time": 1584560872337
+    },
+    {
+      "method": "GET",
+      "url": "/logs",
+      "time": 1584560975687
+    },
+    {
+      "method": "OPTIONS",
+      "url": "/",
+      "time": 1584560988926
+    },
+    {
+      "method": "GET",
+      "url": "/logs?start=1584560166376&end=1584560861168",
+      "time": 1584561442341
+    },
+    {
+      "method": "GET",
+      "url": "/logs",
+      "time": 1584563852699
+    },
+    {
+      "method": "GET",
+      "url": "/logs?start=1584560166376&end=1584560861168",
+      "time": 1584563860814
+    },
+    {
+      "method": "PUT",
+      "url": "/",
+      "time": 1584563867784
+    },
+    {
+      "method": "PUT",
+      "url": "/",
+      "time": 1584564009847
     }
   ]
 }
