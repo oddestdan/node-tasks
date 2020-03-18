@@ -16,9 +16,10 @@ const logData = request => {
   const onReadFile = (err, fileData) => {
     if (!err) {
       const parsedData = JSON.parse(fileData);
-      const { method, url, headers } = request;
+      const { method, url } = request;
+      const time = new Date().getTime();
 
-      parsedData.logs.push({ method, url, headers });
+      parsedData.logs.push({ method, url, time });
       const updatedData = JSON.stringify(parsedData, null, 2);
 
       updateFile(updatedData);

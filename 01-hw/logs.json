@@ -3,62 +3,27 @@
     {
       "method": "POST",
       "url": "/",
-      "headers": {
-        "content-type": "application/json",
-        "user-agent": "PostmanRuntime/7.23.0",
-        "accept": "*/*",
-        "cache-control": "no-cache",
-        "postman-token": "baee0dc1-720f-4b71-b655-bf0677618650",
-        "host": "localhost:8081",
-        "accept-encoding": "gzip, deflate, br",
-        "content-length": "43",
-        "connection": "keep-alive"
-      }
-    },
-    {
-      "method": "POST",
-      "url": "/",
-      "headers": {
-        "content-type": "application/json",
-        "user-agent": "PostmanRuntime/7.23.0",
-        "accept": "*/*",
-        "cache-control": "no-cache",
-        "postman-token": "d9f97dea-fb3a-4601-b69e-0a215572afac",
-        "host": "localhost:8081",
-        "accept-encoding": "gzip, deflate, br",
-        "content-length": "43",
-        "connection": "keep-alive"
-      }
+      "time": 1584544717851
     },
     {
       "method": "GET",
       "url": "/",
-      "headers": {
-        "content-type": "application/json",
-        "user-agent": "PostmanRuntime/7.23.0",
-        "accept": "*/*",
-        "cache-control": "no-cache",
-        "postman-token": "bb579933-caf2-4b26-aa90-d235a2f30382",
-        "host": "localhost:8081",
-        "accept-encoding": "gzip, deflate, br",
-        "content-length": "43",
-        "connection": "keep-alive"
-      }
+      "time": 1584544732843
+    },
+    {
+      "method": "PUT",
+      "url": "/",
+      "time": 1584544734600
+    },
+    {
+      "method": "PATCH",
+      "url": "/",
+      "time": 1584544736573
     },
     {
       "method": "DELETE",
       "url": "/",
-      "headers": {
-        "content-type": "application/json",
-        "user-agent": "PostmanRuntime/7.23.0",
-        "accept": "*/*",
-        "cache-control": "no-cache",
-        "postman-token": "90bc0e33-2c4a-4c20-b981-6c579854e62d",
-        "host": "localhost:8081",
-        "accept-encoding": "gzip, deflate, br",
-        "content-length": "43",
-        "connection": "keep-alive"
-      }
+      "time": 1584544738311
     }
   ]
 }

@@ -1,10 +1,12 @@
 const http = require('http');
 const logger = require('./logger');
 
+const responseJSON = { status: 'ok' };
+
 const onRequest = (request, response) => {
-  logger.logData(request); // TODO: pass request here for info
-  response.writeHead(200);
-  response.end();
+  logger.logData(request);
+  response.writeHead(200, { 'Content-Type': 'application/json' });
+  response.end(JSON.stringify(responseJSON));
 };
 
 http.createServer(onRequest).listen(8081);
