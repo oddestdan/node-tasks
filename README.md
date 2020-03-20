@@ -31,3 +31,6 @@ Additionally, you should be able to:
 * Let user delete their account
 * Generate docs using apidoc npm package
 * Have a simple UI for the application
+
+To **run the app**, use `npm run dev` when in 02-hw folder
+(*note that server is pre-configured to run concurrently with the client on port 8081*).

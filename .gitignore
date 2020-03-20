@@ -1,3 +1,10 @@
+# PowerPoint presentation lectures
 resources/*.pptx
 
+# dependencies
 node_modules/
+/.pnp
+.pnp.js
+
+# production
+/build

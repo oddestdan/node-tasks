@@ -1,0 +1,17 @@
+.Notes {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  width: 100%;
+}
+
+.Notes__title {
+  font-weight: 900;
+  font-size: 4rem;
+}
+
+.Notes__wrapper {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
