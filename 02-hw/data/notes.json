@@ -3,12 +3,28 @@
     "userId": 1,
     "notes": [
       {
+        "id": 1,
         "title": "note11",
-        "content": "This is some note 11"
+        "content": "This is some note 11",
+        "isChecked": false
       },
       {
+        "id": 2,
         "title": "note12",
-        "content": "This is some note 12"
+        "content": "This is some note 12",
+        "isChecked": false
+      },
+      {
+        "id": 3,
+        "title": "Some Updated note",
+        "content": "Some updated content of a note",
+        "isChecked": false
+      },
+      {
+        "id": 4,
+        "title": "Some New note",
+        "content": "Some content of a new note",
+        "isChecked": false
       }
     ]
   },
@@ -16,12 +32,16 @@
     "userId": 2,
     "notes": [
       {
+        "id": 1,
         "title": "note21",
-        "content": "This is some note 21"
+        "content": "This is some note 21",
+        "isChecked": false
       },
       {
+        "id": 2,
         "title": "note22",
-        "content": "This is some note 22"
+        "content": "This is some note 22",
+        "isChecked": false
       }
     ]
   }

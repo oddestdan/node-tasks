@@ -10,16 +10,16 @@ const auth = require('./routes/middleware/auth');
 const loginRouter = require('./routes/api/login');
 const notesRouter = require('./routes/api/notes');
 const userRouter = require('./routes/api/user');
+// Unhandled routes
 const restRouter = require('./routes/api/rest');
 
 app.use(express.json());
 app.use(static);
-
 app.use(log);
-app.use('/api', loginRouter);
 app.use(auth);
-app.use('/api', userRouter);
 
+app.use('/api', loginRouter);
+app.use('/api', userRouter);
 app.use('/api', notesRouter);
 
 app.use('', restRouter);
