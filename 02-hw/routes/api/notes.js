@@ -65,4 +65,16 @@ router.patch('/notes/:id', (req, res) => {
   res.status(200).json({ status: 'ok' });
 });
 
+// Toggle check a note
+router.patch('/notes/check/:id', (req, res) => {
+  const noteId = +req.params.id;
+  const note = getNotesByUserId(req.user.id).find(note => note.id === noteId);
+
+  note.isChecked = !note.isChecked;
+  logger.updateFile(path.join(__dirname, '../../data/notes.json'), mockNotes);
+
+  console.log(`Checked User #${req.user.id} note #${noteId}`);
+  res.status(200).json({ status: 'ok' });
+});
+
 module.exports = router;
