@@ -8,6 +8,7 @@ const TOKEN =
 
 const Notes = () => {
   const [notes, setNotes] = useState([]);
+  const [amount, setAmount] = useState([]);
 
   const fetchNotes = async () => {
     const response = await fetch('http://localhost:8081/api/notes', {
@@ -17,8 +18,9 @@ const Notes = () => {
         Authorization: `JWT ${TOKEN}`
       }
     });
-    const { notes } = await response.json();
+    const { notes, amount } = await response.json();
     setNotes(notes);
+    setAmount(amount);
   };
 
   const checkNote = async id => {
@@ -32,8 +34,9 @@ const Notes = () => {
         }
       }
     );
-    const { notes } = await response.json();
+    const { notes, amount } = await response.json();
     setNotes(notes);
+    setAmount(amount);
   };
 
   const createNote = async (title, content) => {
@@ -45,8 +48,22 @@ const Notes = () => {
       },
       body: JSON.stringify({ title, content })
     });
-    const { notes } = await response.json();
+    const { notes, amount } = await response.json();
     setNotes(notes);
+    setAmount(amount);
+  };
+
+  const deleteNote = async id => {
+    const response = await fetch(`http://localhost:8081/api/notes/${id}`, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `JWT ${TOKEN}`
+      }
+    });
+    const { notes, amount } = await response.json();
+    setNotes(notes);
+    setAmount(amount);
   };
 
   useEffect(() => {
@@ -55,12 +72,19 @@ const Notes = () => {
 
   return (
     <div className="Notes">
-      <h1 className="Notes__title">Notes</h1>
+      <h1 className="Notes__title">
+        Notes<sup className="Notes__amount">{`(${amount})`}</sup>
+      </h1>
       <NoteCreate createNote={createNote} />
       {notes.length ? (
         <div className="Notes__wrapper">
           {notes.map(note => (
-            <Note note={note} key={note.id} checkNote={checkNote} />
+            <Note
+              note={note}
+              key={note.id}
+              deleteNote={deleteNote}
+              checkNote={checkNote}
+            />
           ))}
         </div>
       ) : (

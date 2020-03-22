@@ -5,7 +5,7 @@
   position: relative;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
   border-radius: 2px;
-  padding: 10px 30px 10px 10px;
+  padding: 10px 40px 10px 10px;
   margin: 10px;
   transition: all 0.3s;
   color: #f0f0f0;
@@ -20,10 +20,18 @@
 }
 
 .Note__checker {
-  display: none;
-  position: absolute;
   top: 5px;
   right: 5px;
+}
+
+.Note__deleter {
+  top: 35px;
+  right: 5px;
+}
+
+.Note__action-icon {
+  display: none;
+  position: absolute;
   height: 20px;
   width: 20px;
   background-color: rgba(255, 255, 255, 0.384);
@@ -32,10 +40,15 @@
   color: #e6793b;
   cursor: pointer;
   font-weight: 900;
+  transition: all 0.1s;
   text-align: center;
 }
 
-.Note:hover .Note__checker {
+.Note__action-icon:hover {
+  color: #f5955e;
+}
+
+.Note:hover .Note__action-icon {
   display: block;
 }
 
