@@ -1,24 +1,28 @@
 const express = require('express');
-const path = require('path');
-
-const mockNotes = ['item1', 'item2', 'item3'];
-
-// Create express application
 const app = express();
 
-// Serve the static files from the React app
-app.use(express.static(path.join(__dirname, 'client/build')));
+// Backend middleware
+const static = require('./routes/middleware/static');
+const log = require('./routes/middleware/log');
+const auth = require('./routes/middleware/auth');
 
-// An api endpoint that returns a short list of items
-app.get('/api/notes', (req, res) => {
-  res.json(mockNotes);
-  console.log('Sent list of items');
-});
+// Handled routes
+const loginRouter = require('./routes/api/login');
+const notesRouter = require('./routes/api/notes');
+const userRouter = require('./routes/api/user');
+const restRouter = require('./routes/api/rest');
 
-// Handles any requests that don't match the ones above
-app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname + '/client/build/index.html'));
-});
+app.use(express.json());
+app.use(static);
+
+app.use(log);
+app.use('/api', loginRouter);
+app.use(auth);
+app.use('/api', userRouter);
+
+app.use('/api', notesRouter);
+
+app.use('', restRouter);
 
 const port = process.env.PORT || 8081;
 app.listen(port);
