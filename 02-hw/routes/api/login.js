@@ -4,7 +4,6 @@ const router = express.Router();
 
 const { secret } = require('../../config/auth.json');
 const mockUsers = require('../../data/users.json');
-const mockNotes = require('../../data/notes.json');
 
 router.post('/login', (req, res) => {
   const { username, password } = req.body;

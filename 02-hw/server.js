@@ -1,5 +1,19 @@
 const express = require('express');
 const app = express();
+const cors = require('cors');
+
+// Check against CORS whitelist
+const whitelist = ['http://localhost:3000'];
+const corsOptions = {
+  origin: (origin, callback) => {
+    if (whitelist.indexOf(origin) !== -1) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  }
+};
+app.use(cors(corsOptions));
 
 // Backend middleware
 const static = require('./routes/middleware/static');
@@ -16,9 +30,9 @@ const restRouter = require('./routes/api/rest');
 app.use(express.json());
 app.use(static);
 app.use(log);
-app.use(auth);
 
 app.use('/api', loginRouter);
+app.use(auth);
 app.use('/api', userRouter);
 app.use('/api', notesRouter);
 

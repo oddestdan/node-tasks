@@ -10,7 +10,7 @@ const { getNotesByUserId } = require('../../utils/notes');
 router.get('/notes', (req, res) => {
   const notes = getNotesByUserId(req.user.id);
 
-  res.json({ notes, amount: notes.length });
+  res.status(200).json({ notes, amount: notes.length });
   console.log(`Sent User #${req.user.id} notes`);
 });
 
@@ -19,7 +19,7 @@ router.get('/notes/:id', (req, res) => {
   const noteId = +req.params.id;
   const note = getNotesByUserId(req.user.id).find(note => note.id === noteId);
 
-  res.json({ note });
+  res.status(200).json({ note });
   console.log(`Sent User #${req.user.id} note #${noteId}`);
 });
 
@@ -32,7 +32,7 @@ router.post('/notes/', (req, res) => {
   logger.updateFile(path.join(__dirname, '../../data/notes.json'), mockNotes);
 
   console.log(`Created User #${req.user.id} note #${newId}`);
-  res.status(200).json({ status: 'ok' });
+  res.status(200).json({ notes });
 });
 
 // Delete a note
@@ -48,7 +48,7 @@ router.delete('/notes/:id', (req, res) => {
   logger.updateFile(path.join(__dirname, '../../data/notes.json'), mockNotes);
 
   console.log(`Deleted User #${req.user.id} note #${noteId}`);
-  res.status(200).json({ status: 'ok' });
+  res.status(200).json({ notes });
 });
 
 // Update a note
@@ -62,19 +62,20 @@ router.patch('/notes/:id', (req, res) => {
   logger.updateFile(path.join(__dirname, '../../data/notes.json'), mockNotes);
 
   console.log(`Updated User #${req.user.id} note #${noteId}`);
-  res.status(200).json({ status: 'ok' });
+  res.status(200).json({ notes });
 });
 
 // Toggle check a note
 router.patch('/notes/check/:id', (req, res) => {
   const noteId = +req.params.id;
-  const note = getNotesByUserId(req.user.id).find(note => note.id === noteId);
+  const notes = getNotesByUserId(req.user.id);
+  const note = notes.find(note => note.id === noteId);
 
   note.isChecked = !note.isChecked;
   logger.updateFile(path.join(__dirname, '../../data/notes.json'), mockNotes);
 
   console.log(`Checked User #${req.user.id} note #${noteId}`);
-  res.status(200).json({ status: 'ok' });
+  res.status(200).json({ notes });
 });
 
 module.exports = router;
