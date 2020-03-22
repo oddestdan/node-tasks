@@ -12,7 +12,7 @@
         "id": 2,
         "title": "note12",
         "content": "This is some note 12",
-        "isChecked": false
+        "isChecked": true
       },
       {
         "id": 3,
@@ -24,6 +24,12 @@
         "id": 4,
         "title": "Some New note",
         "content": "Some content of a new note",
+        "isChecked": false
+      },
+      {
+        "id": 5,
+        "title": "noteNew",
+        "content": "This is a new Note",
         "isChecked": false
       }
     ]

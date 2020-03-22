@@ -28,7 +28,7 @@ router.post('/notes/', (req, res) => {
   const notes = getNotesByUserId(req.user.id);
   const newId = notes[notes.length - 1].id + 1;
 
-  notes.push({ id: newId, ...req.body });
+  notes.push({ id: newId, ...req.body, isChecked: false });
   logger.updateFile(path.join(__dirname, '../../data/notes.json'), mockNotes);
 
   console.log(`Created User #${req.user.id} note #${newId}`);

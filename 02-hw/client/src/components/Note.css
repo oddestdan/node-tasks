@@ -1,7 +1,55 @@
 .Note {
-  padding: 20px;
-  margin: 10px 30px;
   background-color: rgba(52, 194, 139, 0.719);
+  min-width: 25%;
+  height: auto;
+  position: relative;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+  border-radius: 2px;
+  padding: 10px 30px 10px 10px;
+  margin: 10px;
+  transition: all 0.3s;
   color: #f0f0f0;
-  font-weight: 700;
+}
+
+.Note--is-checked {
+  background-color: rgba(34, 139, 99, 0.849);
+}
+
+.Note:hover {
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
+}
+
+.Note__checker {
+  display: none;
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  height: 20px;
+  width: 20px;
+  background-color: rgba(255, 255, 255, 0.384);
+  border-radius: 3px;
+  text-transform: uppercase;
+  color: #e6793b;
+  cursor: pointer;
+  font-weight: 900;
+  text-align: center;
+}
+
+.Note:hover .Note__checker {
+  display: block;
+}
+
+.Note__title {
+  font-weight: 900;
+}
+
+.Note__content {
+  font-weight: 400;
+}
+
+.Note__is-checked {
+  padding-left: 10px;
+  float: right;
+  font-weight: normal;
+  font-style: italic;
 }

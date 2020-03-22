@@ -36,9 +36,11 @@ To **run the app**, use `npm run dev` when in 02-hw folder
 (*note that server is pre-configured to run concurrently with the client on port 8081*).
 
 The following is a list of requests an authorized user can perform to operate notes:
+* Log in: POST `/api/login`
+* Authorize user: GET `/api/user` 
 * Fetch notes: GET `/api/notes`
-* Fetch note: GET `/api/note/:id`
-* Delete note: DELETE `/api/note/:id`
-* Create note: POST `/api/note`
-* Update note: PATCH `/api/note/:id`
-* Toggle check note: PATCH `/api/note/check/:id`
+* Fetch note: GET `/api/notes/:id`
+* Delete note: DELETE `/api/notes/:id`
+* Create note: POST `/api/notes`
+* Update note: PATCH `/api/notes/:id`
+* Toggle check note: PATCH `/api/notes/check/:id`

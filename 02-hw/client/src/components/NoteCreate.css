@@ -1,0 +1,43 @@
+.NoteCreate {
+  width: 100%;
+  justify-content: center;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.NoteCreate__input-menu {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  margin: 0 20px;
+}
+
+.NoteCreate__input-label {
+  font-weight: 900;
+}
+
+.NoteCreate__input {
+  font-weight: 400;
+  min-width: 100px;
+  margin: 5px 0 5px 10px;
+  padding: 5px;
+}
+
+.NoteCreate__create {
+  padding: 20px 30px;
+  margin: 0 20px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+  font-weight: 700;
+  background-color: #e6793b;
+  color: #f0f0f0;
+  border-radius: 3px;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.NoteCreate__create:hover {
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
+}
