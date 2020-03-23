@@ -32,7 +32,7 @@ router.post('/notes/', (req, res) => {
   logger.updateFile(path.join(__dirname, '../../data/notes.json'), mockNotes);
 
   console.log(`Created User #${req.user.id} note #${newId}`);
-  res.status(200).json({ notes });
+  res.status(200).json({ notes, amount: notes.length });
 });
 
 // Delete a note
@@ -48,7 +48,7 @@ router.delete('/notes/:id', (req, res) => {
   logger.updateFile(path.join(__dirname, '../../data/notes.json'), mockNotes);
 
   console.log(`Deleted User #${req.user.id} note #${noteId}`);
-  res.status(200).json({ notes });
+  res.status(200).json({ notes, amount: notes.length });
 });
 
 // Update a note
@@ -62,7 +62,7 @@ router.put('/notes/:id', (req, res) => {
   logger.updateFile(path.join(__dirname, '../../data/notes.json'), mockNotes);
 
   console.log(`Updated User #${req.user.id} note #${noteId}`);
-  res.status(200).json({ notes });
+  res.status(200).json({ notes, amount: notes.length });
 });
 
 // Toggle check a note
@@ -75,7 +75,7 @@ router.patch('/notes/check/:id', (req, res) => {
   logger.updateFile(path.join(__dirname, '../../data/notes.json'), mockNotes);
 
   console.log(`Checked User #${req.user.id} note #${noteId}`);
-  res.status(200).json({ notes });
+  res.status(200).json({ notes, amount: notes.length });
 });
 
 module.exports = router;
