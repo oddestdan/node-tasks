@@ -52,7 +52,7 @@ router.delete('/notes/:id', (req, res) => {
 });
 
 // Update a note
-router.patch('/notes/:id', (req, res) => {
+router.put('/notes/:id', (req, res) => {
   const noteId = +req.params.id;
   const notes = getNotesByUserId(req.user.id);
 

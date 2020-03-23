@@ -42,5 +42,5 @@ The following is a list of requests an authorized user can perform to operate no
 * Fetch note: GET `/api/notes/:id`
 * Delete note: DELETE `/api/notes/:id`
 * Create note: POST `/api/notes`
-* Update note: PATCH `/api/notes/:id`
+* Update note: PUT `/api/notes/:id`
 * Toggle check note: PATCH `/api/notes/check/:id`
