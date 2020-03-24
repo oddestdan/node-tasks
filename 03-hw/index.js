@@ -6,7 +6,7 @@ const { DB_URL } = require('./globals/configs');
 
 mongoose.connect(DB_URL, {
   useNewUrlParser: true,
-  useUnifiedTopology: true
+  useUnifiedTopology: true,
 });
 
 // Handled routes
