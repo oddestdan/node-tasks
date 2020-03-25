@@ -2,21 +2,19 @@ const path = require('path');
 
 const config = {
   server: {
-    protocol: 'http',
-    host: '127.0.0.1',
     port: 8081
   },
   log: {
     path: path.join(__dirname, '../logs/logs.json')
   },
   db: {
-    username: 'oddestdan',
-    password: 'ZXnJ5xCk',
-    cluster: 'uber-node-pypi1.mongodb.net',
-    dbname: 'Uber_Node'
+    username: 'foo',
+    password: 'bar',
+    cluster: 'server.example.net',
+    dbname: 'db_example'
   },
   jwt: {
-    secret: 'some_secret_message'
+    secret: 'this_is_a_secret'
   }
 };
 

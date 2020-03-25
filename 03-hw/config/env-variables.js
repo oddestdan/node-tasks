@@ -1,7 +1,5 @@
 const config = {
   server: {
-    protocol: 'SERVER_PROTOCOL',
-    host: 'SERVER_HOST',
     port: 'SERVER_PORT'
   },
   log: {
