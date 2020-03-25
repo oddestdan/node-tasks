@@ -1,5 +1,5 @@
 const { updateFile, readFile } = require('../utils');
-const { LOG_PATH } = require('../globals/paths');
+const { path } = require('config').get('log');
 
 module.exports = (req, res, next) => {
   const { method, url } = req;
@@ -7,9 +7,9 @@ module.exports = (req, res, next) => {
 
   console.log(`Request: ${method} ${url}`);
 
-  const data = JSON.parse(readFile(LOG_PATH, { logs: [] }));
+  const data = JSON.parse(readFile(path, { logs: [] }));
   data.logs.push({ method, url, time });
-  updateFile(LOG_PATH, data);
+  updateFile(path, data);
 
   next();
 };
