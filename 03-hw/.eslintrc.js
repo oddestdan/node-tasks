@@ -17,6 +17,11 @@ module.exports = {
   rules: {
     'object-curly-spacing': 'off',
     'no-unused-vars': 'off',
-    'no-console': 'off'
+    'no-console': 'off',
+    'comma-dangle': 'off',
+    'linebreak-style': 'off',
+    'new-cap': 'off',
+    'arrow-parens': 'off',
+    indent: ['error', 2]
   }
 };
