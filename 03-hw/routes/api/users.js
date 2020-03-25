@@ -1,16 +1,7 @@
 const express = require('express');
-const mongoose = require('mongoose');
 const router = express.Router();
 
-const User = mongoose.model(
-  'User',
-  mongoose.Schema({
-    username: String,
-    password: String, // TODO: implement security hashing
-    role: String,
-    description: String
-  })
-);
+const User = require('../../models/User');
 
 // Get All Users
 router.get('/users', (req, res) => {
@@ -31,24 +22,7 @@ router.get('/users/:id', (req, res) => {
 });
 
 // Create User
-router.post('/users', (req, res) => {
-  console.log('GET /users', req.body);
-  const user = new User({
-    username: req.body.username,
-    password: req.body.password,
-    role: req.body.role,
-    description: req.body.description
-  });
-
-  user
-    .save()
-    .then(() => {
-      res.json({ status: 'new user created' });
-    })
-    .catch(e => {
-      res.status(500).json({ status: e.message });
-    });
-});
+// Handled by 'register'
 
 // Update whole User
 router.put('/users/:id', (req, res) => {
