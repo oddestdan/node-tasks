@@ -17,9 +17,6 @@ mongoose
   .then(() => console.log('MongoDB connected'))
   .catch(err => console.log(err));
 
-// Schema Models
-require('./models/User');
-
 // Backend middleware
 app.use(express.json());
 app.use(require('./middleware/log'));
@@ -32,5 +29,4 @@ app.use(require('./middleware/auth'));
 app.use('/api', require('./routes/api/users'));
 app.use('/api', require('./routes/api/index'));
 
-// const PORT = process.env.PORT || port;
 app.listen(port, () => console.log(`Server started on port ${port}`));
