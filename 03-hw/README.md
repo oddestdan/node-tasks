@@ -8,9 +8,35 @@ Uber-like web application for freight trucks using REST, Vue.js and MongoDB.
 
 _To be added_
 
-## Project setup:
+## Project setup
 
-_To be added_
+```
+npm install
+```
+
+### Compiles and hot-reloads for development
+
+```
+npm run serve
+```
+
+### Compiles and minifies for production
+
+```
+npm run build
+```
+
+### Run your unit tests
+
+```
+npm run test:unit
+```
+
+### Lints and fixes files
+
+```
+npm run lint
+```
 
 ## Project development:
 
