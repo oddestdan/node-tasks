@@ -2,23 +2,34 @@ const express = require('express');
 const mongoose = require('mongoose');
 const app = express();
 
-const { DB_URL } = require('./globals/configs');
+// Config variables
+const config = require('config');
+const { port } = config.get('server');
+const { username, password, cluster, dbname } = config.get('db');
+const dbURI = `mongodb+srv://${username}:${password}@${cluster}/${dbname}?retryWrites=true&w=majority`;
 
-mongoose.connect(DB_URL, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-});
+// MongoDB
+mongoose
+  .connect(dbURI, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true
+  })
+  .then(() => console.log('MongoDB connected'))
+  .catch(err => console.log(err));
 
-// Handled routes
-const usersRouter = require('./routes/api/users');
+// Schema Models
+require('./models/User');
 
 // Backend middleware
-const log = require('./middleware/log');
-
 app.use(express.json());
-app.use(log);
+app.use(require('./middleware/log'));
+// app.use(express.urlencoded({ extended: false }));
 
-app.use('/api', usersRouter);
+app.use('/api', require('./routes/api/register'));
+app.use('/api', require('./routes/api/login'));
+app.use('/api', require('./routes/api/users'));
+// app.use('/api', require('./routes/api/loads'));
+app.use('/api', require('./routes/api/index'));
 
-const PORT = process.env.PORT || 8081;
-app.listen(PORT, () => console.log(`Server has been started on port ${PORT}`));
+// const PORT = process.env.PORT || port;
+app.listen(port, () => console.log(`Server started on port ${port}`));
