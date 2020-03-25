@@ -9,15 +9,19 @@ const { secret } = require('config').get('jwt');
 router.post('/login', (req, res) => {
   const userData = ({ username, password } = req.body);
 
-  User.find(userData)
+  User.findOne(userData)
     .then(user => {
-      const jwtoken = jwt.sign(userData, secret, {
-        expiresIn: 604800 // 1 week
-      });
-      res.json({ status: 'ok', token: `JWT ${jwtoken}`, user });
+      if (user) {
+        const jwtoken = jwt.sign(userData, secret, {
+          expiresIn: 604800 // 1 week
+        });
+        res.json({ status: 'User logged in', token: `JWT ${jwtoken}`, user });
+      } else {
+        res.status(401).json({ status: 'User not found' });
+      }
     })
     .catch(e => {
-      res.status(500).json({ status: e.message }); // 'User not found'
+      res.status(500).json({ status: e.message });
     });
 });
 

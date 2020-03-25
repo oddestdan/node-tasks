@@ -23,12 +23,13 @@ require('./models/User');
 // Backend middleware
 app.use(express.json());
 app.use(require('./middleware/log'));
-// app.use(express.urlencoded({ extended: false }));
 
 app.use('/api', require('./routes/api/register'));
 app.use('/api', require('./routes/api/login'));
+
+app.use(require('./middleware/auth'));
+
 app.use('/api', require('./routes/api/users'));
-// app.use('/api', require('./routes/api/loads'));
 app.use('/api', require('./routes/api/index'));
 
 // const PORT = process.env.PORT || port;
