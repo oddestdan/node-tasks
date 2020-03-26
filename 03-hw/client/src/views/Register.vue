@@ -1,14 +1,14 @@
 <template>
-  <div class="login">
-    <h2>Log in</h2>
+  <div class="register">
+    <h2>Sign up</h2>
     <form @submit.prevent="handleSubmit">
       <div class="form-group">
         <label for="username">Username</label>
         <input
-          class="form-control"
           type="text"
           v-model="user.username"
           name="username"
+          class="form-control"
           :class="{ 'is-invalid': submitted && !user.username }"
         />
         <div v-show="submitted && !user.username" class="invalid-feedback">
@@ -16,12 +16,12 @@
         </div>
       </div>
       <div class="form-group">
-        <label for="password">Password</label>
+        <label htmlFor="password">Password</label>
         <input
-          class="form-control"
           type="password"
           v-model="user.password"
           name="password"
+          class="form-control"
           :class="{ 'is-invalid': submitted && !user.password }"
         />
         <div v-show="submitted && !user.password" class="invalid-feedback">
@@ -29,11 +29,11 @@
         </div>
       </div>
       <div class="form-group">
-        <button class="btn btn-primary" :disabled="status.loggingIn">
-          Login
+        <button class="btn btn-primary" :disabled="status.registering">
+          Sign up
         </button>
-        <!-- <img v-show="status.loggingIn" /> -->
-        <router-link to="/register" class="btn btn-link">Sign up</router-link>
+        <!-- <img v-show="status.registering" /> -->
+        <router-link to="/login" class="btn btn-link">Log in</router-link>
       </div>
     </form>
   </div>
@@ -43,7 +43,7 @@
 import { mapState, mapActions } from 'vuex';
 
 export default {
-  name: 'Login',
+  name: 'Register',
 
   data() {
     return {
@@ -59,18 +59,13 @@ export default {
     ...mapState(['status']),
   },
 
-  created() {
-    this.logout(); // reset
-  },
-
   methods: {
-    ...mapActions(['login', 'logout']),
+    ...mapActions(['register']),
 
     handleSubmit(e) {
       this.submitted = true;
       if (this.user.username && this.user.password) {
-        this.login(this.user);
-        // router.push('/'); // TODO: here or in store?
+        this.register(this.user);
       }
     },
   },
