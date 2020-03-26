@@ -1,41 +1,29 @@
 # node-tasks
 
-## Final, 3rd task:
+## Final, 3rd task
 
 Uber-like web application for freight trucks using REST, Vue.js and MongoDB.
 
-## Prerequisites:
+## Prerequisites
 
-_To be added_
+Installed Node.js, access to MongoDB database.
 
 ## Project setup
 
-```
-npm install
-```
-
-### Compiles and hot-reloads for development
+### Client (UI side)
 
 ```
+cd client
+npm i
 npm run serve
 ```
 
-### Compiles and minifies for production
+### Server (BE side)
 
 ```
-npm run build
-```
-
-### Run your unit tests
-
-```
-npm run test:unit
-```
-
-### Lints and fixes files
-
-```
-npm run lint
+cd server
+npm i
+npm run start
 ```
 
 ## Project development:
