@@ -16,7 +16,7 @@
         </div>
       </div>
       <div class="form-group">
-        <label htmlFor="password">Password</label>
+        <label for="password">Password</label>
         <input
           type="password"
           v-model="user.password"
@@ -29,7 +29,36 @@
         </div>
       </div>
       <div class="form-group">
-        <button class="btn btn-primary" :disabled="status.registering">
+        <div class="form-check">
+          <input
+            class="form-check-input"
+            type="radio"
+            name="shipperRadio"
+            id="shipperRadio"
+            value="shipper"
+            v-model="user.role"
+            checked
+          />
+          <label class="form-check-label" for="shipperRadio">
+            Shipper
+          </label>
+        </div>
+        <div class="form-check">
+          <input
+            class="form-check-input"
+            type="radio"
+            name="driverRadio"
+            id="driverRadio"
+            value="driver"
+            v-model="user.role"
+          />
+          <label class="form-check-label" for="driverRadio">
+            Driver
+          </label>
+        </div>
+      </div>
+      <div class="form-group">
+        <button class="btn btn-dark" :disabled="status.registering">
           Sign up
         </button>
         <!-- <img v-show="status.registering" /> -->
@@ -50,6 +79,7 @@ export default {
       user: {
         username: '',
         password: '',
+        role: '',
       },
       submitted: false,
     };
@@ -59,8 +89,12 @@ export default {
     ...mapState(['status']),
   },
 
+  created() {
+    this.logout(); // reset
+  },
+
   methods: {
-    ...mapActions(['register']),
+    ...mapActions(['register', 'logout']),
 
     handleSubmit(e) {
       this.submitted = true;

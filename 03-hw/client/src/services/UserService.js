@@ -21,7 +21,7 @@ function handleResponse(response) {
 }
 
 export default {
-  login(username, password) {
+  async login(username, password) {
     const requestConfig = {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -30,18 +30,15 @@ export default {
 
     console.log(requestConfig);
 
-    return fetch(`${baseURL}/login`, requestConfig)
-      .then(handleResponse)
-      .then(user => {
-        // login successful if there's a jwt token in the response
-        if (user.token) {
-          // store user details and jwt token in local storage
-          // to keep user logged in between page refreshes
-          localStorage.setItem('user', JSON.stringify(user));
-        }
-
-        return user;
-      });
+    const response = await fetch(`${baseURL}/login`, requestConfig);
+    const user = await handleResponse(response);
+    // login successful if there's a jwt token in the response
+    if (user.token) {
+      // store user details and jwt token in local storage
+      // to keep user logged in between page refreshes
+      localStorage.setItem('user', JSON.stringify(user));
+    }
+    return user;
   },
 
   logout() {
@@ -49,7 +46,7 @@ export default {
     localStorage.removeItem('user');
   },
 
-  register(user) {
+  async register(user) {
     // registerUser
     const requestConfig = {
       method: 'POST',
@@ -59,7 +56,8 @@ export default {
 
     console.log(requestConfig);
 
-    return fetch(`${baseURL}/register`, requestConfig).then(handleResponse);
+    const response = await fetch(`${baseURL}/register`, requestConfig);
+    return handleResponse(response);
   },
 
   async getAll() {
@@ -74,34 +72,35 @@ export default {
     return handleResponse(response);
   },
 
-  getById(id) {
+  async getById(id) {
     const requestConfig = {
       method: 'GET',
       headers: auth(),
     };
 
-    return fetch(`${baseURL}/users/${id}`, requestConfig).then(handleResponse);
+    const response = await fetch(`${baseURL}/users/${id}`, requestConfig);
+    return handleResponse(response);
   },
 
-  update(user) {
+  async update(user) {
     const requestConfig = {
       method: 'PUT',
       headers: { ...auth(), 'Content-Type': 'application/json' },
       body: JSON.stringify(user),
     };
 
-    return fetch(`${baseURL}/users/${user.id}`, requestConfig).then(
-      handleResponse
-    );
+    const response = await fetch(`${baseURL}/users/${user.id}`, requestConfig);
+    return handleResponse(response);
   },
 
   // underscore prefixed because delete is a reserved word in JS
-  _delete(id) {
+  async _delete(id) {
     const requestConfig = {
       method: 'DELETE',
       headers: auth(),
     };
 
-    return fetch(`${baseURL}/users/${id}`, requestConfig).then(handleResponse);
+    const response = await fetch(`${baseURL}/users/${id}`, requestConfig);
+    return handleResponse(response);
   },
 };

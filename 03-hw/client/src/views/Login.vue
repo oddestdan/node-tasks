@@ -29,7 +29,7 @@
         </div>
       </div>
       <div class="form-group">
-        <button class="btn btn-primary" :disabled="status.loggingIn">
+        <button class="btn btn-dark" :disabled="status.loggingIn">
           Login
         </button>
         <!-- <img v-show="status.loggingIn" /> -->

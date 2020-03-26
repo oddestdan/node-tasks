@@ -7,7 +7,7 @@ const router = express.Router();
 const User = require('../../models/User');
 
 router.post('/register', (req, res) => {
-  const { username, password, role } = req.body;
+  const userData = ({ username, password, role } = req.body);
 
   // // asynchronous
   // bcrypt.genSalt(10, (err, salt) => {
@@ -16,14 +16,16 @@ router.post('/register', (req, res) => {
   //   });
   // });
 
-  const user = new User({ username, password, role });
+  const user = new User(userData);
 
   user
     .save()
     .then(() => {
+      console.log('Then in register');
       res.json({ status: 'New user created', user });
     })
     .catch(e => {
+      console.log('Catch in register');
       res.status(500).json({ status: e.message });
     });
 
