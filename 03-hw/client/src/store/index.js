@@ -20,6 +20,7 @@ export default new Vuex.Store({
 
     // Users management
     all: {},
+    users: [],
   },
 
   mutations: {
@@ -71,13 +72,14 @@ export default new Vuex.Store({
       state.all = { loading: true };
     },
     getAllSuccess(state, users) {
-      state.all = { items: users };
+      state.users = users;
     },
     getAllFailure(state, error) {
       state.all = { error };
     },
     deleteRequest(state, id) {
       // add 'deleting:true' property to user being deleted
+      // TODO: rethink all.items
       state.all.items = state.all.items.map(user =>
         user.id === id ? { ...user, deleting: true } : user
       );
@@ -160,7 +162,7 @@ export default new Vuex.Store({
       commit('getAllRequest');
 
       UserService.getAll().then(
-        users => commit('getAllSuccess', users),
+        resp => commit('getAllSuccess', resp.users),
         error => commit('getAllFailure', error)
       );
     },

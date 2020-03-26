@@ -4,7 +4,7 @@
       <div class="row">
         <div class="col-xs-12">
           <h1>Users</h1>
-          <section class="panel panel-success" v-if="users.items.users.length">
+          <section class="panel panel-success" v-if="users.length">
             <div class="panel-heading">List of users</div>
             <table class="table table-striped">
               <!-- <tr v-for="key in Object.keys(users[0])" :key="key"> -->
@@ -16,10 +16,7 @@
                 <th>Phone</th>
                 <th>Email</th>
               </tr>
-              <tr
-                v-for="(user, i) in users.items.users"
-                :key="`${user.username}_${i}`"
-              >
+              <tr v-for="(user, i) in users" :key="`${user.username}_${i}`">
                 <td>{{ user.username }}</td>
                 <td>{{ user.password }}</td>
                 <td>{{ user.role }}</td>
@@ -28,7 +25,7 @@
               </tr>
             </table>
           </section>
-          <section class="panel panel-danger" v-if="!users.items.users.length">
+          <section class="panel panel-danger" v-else>
             <p>There are no users added...</p>
           </section>
         </div>
@@ -46,7 +43,7 @@ export default {
   computed: {
     ...mapState({
       account: state => state.account,
-      users: state => state.all,
+      users: state => state.users,
     }),
   },
 
@@ -55,11 +52,6 @@ export default {
       getAllUsers: 'getAll',
       deleteUser: 'delete',
     }),
-
-    // async getUsers() {
-    // const response = await UserService.fetchUsers();
-    // this.users = response.data.users;
-    // },
   },
 
   created() {

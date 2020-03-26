@@ -28,8 +28,6 @@ export default {
       body: JSON.stringify({ username, password }),
     };
 
-    console.log(requestConfig);
-
     const response = await fetch(`${baseURL}/login`, requestConfig);
     const user = await handleResponse(response);
     // login successful if there's a jwt token in the response
@@ -54,8 +52,6 @@ export default {
       body: JSON.stringify(user),
     };
 
-    console.log(requestConfig);
-
     const response = await fetch(`${baseURL}/register`, requestConfig);
     return handleResponse(response);
   },
@@ -65,8 +61,6 @@ export default {
       method: 'GET',
       headers: auth(),
     };
-
-    console.dir(requestConfig);
 
     const response = await fetch(`${baseURL}/users`, requestConfig);
     return handleResponse(response);

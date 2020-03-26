@@ -21,11 +21,9 @@ router.post('/register', (req, res) => {
   user
     .save()
     .then(() => {
-      console.log('Then in register');
       res.json({ status: 'New user created', user });
     })
     .catch(e => {
-      console.log('Catch in register');
       res.status(500).json({ status: e.message });
     });
 
