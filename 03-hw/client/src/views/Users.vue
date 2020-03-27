@@ -5,11 +5,10 @@
         <div class="col-xs-12">
           <h1>Users</h1>
           <section class="panel panel-success" v-if="users.length">
-            <div class="panel-heading">List of users</div>
+            <!-- <div class="panel-heading">List of users</div> -->
             <table class="table table-striped">
-              <!-- <tr v-for="key in Object.keys(users[0])" :key="key"> -->
-              <!-- <th>{{ key }}</th> -->
               <tr>
+                <th>ID</th>
                 <th>Username</th>
                 <th>Password</th>
                 <th>Role</th>
@@ -17,11 +16,19 @@
                 <th>Email</th>
               </tr>
               <tr v-for="(user, i) in users" :key="`${user.username}_${i}`">
+                <!-- <router-link to="/user/:id">
+                {{ user.username }}</router-link>-->
+                <td>{{ user._id }}</td>
                 <td>{{ user.username }}</td>
                 <td>{{ user.password }}</td>
                 <td>{{ user.role }}</td>
                 <td>{{ user.phone || '-' }}</td>
                 <td>{{ user.email || '-' }}</td>
+                <td
+                  class="actions"
+                  v-if="user.role === 'shipper'"
+                  @click="() => handleClickDelete(user._id)"
+                >x</td>
               </tr>
             </table>
           </section>
@@ -50,8 +57,12 @@ export default {
   methods: {
     ...mapActions({
       getAllUsers: 'getAll',
-      deleteUser: 'delete',
+      deleteUser: 'remove',
     }),
+
+    handleClickDelete(id) {
+      this.deleteUser(id);
+    },
   },
 
   created() {

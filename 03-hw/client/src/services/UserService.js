@@ -87,8 +87,8 @@ export default {
     return handleResponse(response);
   },
 
-  // underscore prefixed because delete is a reserved word in JS
-  async _delete(id) {
+  // remove because delete is a reserved word in JS
+  async remove(id) {
     const requestConfig = {
       method: 'DELETE',
       headers: auth(),

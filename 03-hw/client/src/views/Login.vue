@@ -66,11 +66,12 @@ export default {
   methods: {
     ...mapActions(['login', 'logout']),
 
-    handleSubmit(e) {
+    async handleSubmit(e) {
       this.submitted = true;
       if (this.user.username && this.user.password) {
-        this.login(this.user);
-        // router.push('/'); // TODO: here or in store?
+        await this.login(this.user);
+        // TODO: needs to change for successful login
+        this.$router.push('/');
       }
     },
   },

@@ -72,26 +72,34 @@ export default new Vuex.Store({
       state.all = { loading: true };
     },
     getAllSuccess(state, users) {
+      console.dir(users);
       state.users = users;
     },
     getAllFailure(state, error) {
       state.all = { error };
     },
     deleteRequest(state, id) {
+      // TODO: rethink 'all' as a single storage point for
+      // items, users etc.
+
       // add 'deleting:true' property to user being deleted
-      // TODO: rethink all.items
-      state.all.items = state.all.items.map(user =>
+
+      // state.all.items = state.all.items.map(user =>
+      state.users = state.users.map( user =>
         user.id === id ? { ...user, deleting: true } : user
       );
     },
     deleteSuccess(state, id) {
       // remove deleted user from state
-      state.all.items = state.all.items.filter(user => user.id !== id);
+      // state.all.items = state.all.items.filter(user => user.id !== id);
+      state.users = state.users.filter(user => user.id !== id);
     },
     deleteFailure(state, { id, error }) {
       // remove 'deleting:true' property and add 'deleteError:[error]'
       // property to user
-      state.all.items = state.items.map(user => {
+
+      // state.all.items = state.items.map(user => {
+      state.users = state.users.map(user => {
         if (user.id === id) {
           // make copy of user without 'deleting:true' property
           // eslint-disable-next-line
@@ -167,11 +175,14 @@ export default new Vuex.Store({
       );
     },
 
-    delete({ commit }, id) {
+    remove({ commit }, id) {
       commit('deleteRequest', id);
 
-      UserService.delete(id).then(
-        user => commit('deleteSuccess', id),
+      UserService.remove(id).then(
+        user => {
+          console.log(user);
+          commit('deleteSuccess', user.id);
+        },
         error => commit('deleteFailure', { id, error: error.toString() })
       );
     },

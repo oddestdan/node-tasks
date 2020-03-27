@@ -96,10 +96,12 @@ export default {
   methods: {
     ...mapActions(['register', 'logout']),
 
-    handleSubmit(e) {
+    async handleSubmit(e) {
       this.submitted = true;
       if (this.user.username && this.user.password) {
-        this.register(this.user);
+        await this.register(this.user);
+        // TODO: needs to change for successful login
+        this.$router.push('/');
       }
     },
   },
