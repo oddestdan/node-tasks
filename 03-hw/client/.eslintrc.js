@@ -28,5 +28,10 @@ module.exports = {
     'no-console': process.env.NODE_ENV === 'production' ? 'error' : 'off',
     'no-debugger': process.env.NODE_ENV === 'production' ? 'error' : 'off',
     'arrow-parens': 'off',
+    'object-curly-spacing': 'off',
+    'require-jsdoc': 'off',
+    'comma-dangle': 'off',
+    indent: 'off',
+    // 'no-invalid-this': 'off',
   },
 };

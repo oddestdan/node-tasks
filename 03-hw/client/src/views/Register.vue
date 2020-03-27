@@ -1,14 +1,14 @@
 <template>
-  <div class="login">
-    <h2>Log in</h2>
+  <div class="register">
+    <h2>Sign up</h2>
     <form @submit.prevent="handleSubmit">
       <div class="form-group">
         <label for="username">Username</label>
         <input
-          class="form-control"
           type="text"
           v-model="user.username"
           name="username"
+          class="form-control"
           :class="{ 'is-invalid': submitted && !user.username }"
         />
         <div v-show="submitted && !user.username" class="invalid-feedback">
@@ -18,10 +18,10 @@
       <div class="form-group">
         <label for="password">Password</label>
         <input
-          class="form-control"
           type="password"
           v-model="user.password"
           name="password"
+          class="form-control"
           :class="{ 'is-invalid': submitted && !user.password }"
         />
         <div v-show="submitted && !user.password" class="invalid-feedback">
@@ -29,11 +29,40 @@
         </div>
       </div>
       <div class="form-group">
-        <button class="btn btn-dark" :disabled="status.loggingIn">
-          Login
+        <div class="form-check">
+          <input
+            class="form-check-input"
+            type="radio"
+            name="shipperRadio"
+            id="shipperRadio"
+            value="shipper"
+            v-model="user.role"
+            checked
+          />
+          <label class="form-check-label" for="shipperRadio">
+            Shipper
+          </label>
+        </div>
+        <div class="form-check">
+          <input
+            class="form-check-input"
+            type="radio"
+            name="driverRadio"
+            id="driverRadio"
+            value="driver"
+            v-model="user.role"
+          />
+          <label class="form-check-label" for="driverRadio">
+            Driver
+          </label>
+        </div>
+      </div>
+      <div class="form-group">
+        <button class="btn btn-dark" :disabled="status.registering">
+          Sign up
         </button>
-        <!-- <img v-show="status.loggingIn" /> -->
-        <router-link to="/register" class="btn btn-link">Sign up</router-link>
+        <!-- <img v-show="status.registering" /> -->
+        <router-link to="/login" class="btn btn-link">Log in</router-link>
       </div>
     </form>
   </div>
@@ -43,13 +72,14 @@
 import { mapState, mapActions } from 'vuex';
 
 export default {
-  name: 'Login',
+  name: 'Register',
 
   data() {
     return {
       user: {
         username: '',
         password: '',
+        role: '',
       },
       submitted: false,
     };
@@ -64,12 +94,12 @@ export default {
   },
 
   methods: {
-    ...mapActions(['login', 'logout']),
+    ...mapActions(['register', 'logout']),
 
     async handleSubmit(e) {
       this.submitted = true;
       if (this.user.username && this.user.password) {
-        await this.login(this.user);
+        await this.register(this.user);
         // TODO: needs to change for successful login
         this.$router.push('/');
       }
