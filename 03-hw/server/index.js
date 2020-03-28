@@ -30,5 +30,6 @@ app.use(require('./middleware/auth'));
 
 app.use('/api', require('./routes/api/users'));
 app.use('/api', require('./routes/api/loads'));
+app.use('/api', require('./routes/api/trucks'));
 
 app.listen(port, () => console.log(`Server started on port ${port}`));
