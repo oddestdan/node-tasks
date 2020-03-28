@@ -4,26 +4,25 @@ const router = express.Router();
 const Load = require('../../models/Load');
 const User = require('../../models/User');
 
-const getCreatorIdByUser = async user => {
+const getUserByUserPass = async user => {
   const { username, password } = user;
-  return (await User.findOne({ username, password }))._id;
+  return User.findOne({ username, password });
 };
 
-// // Get All Loads
-// router.get('/loads', (req, res) => {
-//   Load.find({})
-//     .then(loads => res.json({ status: 'ok', loads }))
-//     .catch(e => {
-//       res.status(500).json({ status: e.message });
-//     });
-// });
-
-// Get Created Loads
+// Get Created Loads or Get Assigned Loads
 router.get('/loads', async (req, res) => {
-  const creatorId = await getCreatorIdByUser(req.user);
+  const { _id } = await getUserByUserPass(req.user);
 
-  Load.find({ creatorId })
-    .then(loads => res.json({ status: 'ok', loads }))
+  Load.find({
+    $or: [{ creatorId: _id }, { assigneeId: _id }]
+  })
+    .then(loads => {
+      if (loads.length) {
+        res.json({ status: 'ok', loads });
+      } else {
+        res.status(400).json({ status: 'No loads found' });
+      }
+    })
     .catch(e => {
       res.status(500).json({ status: e.message });
     });
@@ -48,22 +47,23 @@ router.post('/loads', async (req, res) => {
   // dimensions: Specified at UI (Object)
   // payload: Specified at UI (Number)
 
-  console.log('USER:');
-  console.dir(req.user);
-
   const { dimensions, payload } = req.body;
-  const creatorId = await getCreatorIdByUser(req.user);
+  const user = await getUserByUserPass(req.user);
+  if (user.role === 'shipper') {
+    const creatorId = user._id;
+    const load = new Load({ dimensions, payload, creatorId });
 
-  const load = new Load({ dimensions, payload, creatorId });
-
-  load
-    .save()
-    .then(() => {
-      res.json({ status: 'New load created', load });
-    })
-    .catch(e => {
-      res.status(500).json({ status: e.message });
-    });
+    load
+      .save()
+      .then(() => {
+        res.json({ status: 'New load created', load });
+      })
+      .catch(e => {
+        res.status(500).json({ status: e.message });
+      });
+  } else {
+    res.status(400).json({ status: 'Driver is unable to create loads' });
+  }
 });
 
 // Update Load if NEW

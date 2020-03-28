@@ -1,8 +1,8 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
 
-// import { account } from './account.module';
 import UserService from '../services/UserService';
+import LoadService from '../services/LoadService';
 
 Vue.use(Vuex);
 
@@ -21,6 +21,9 @@ export default new Vuex.Store({
     // Users management
     all: {},
     users: [],
+
+    // Loads management
+    loads: [],
   },
 
   mutations: {
@@ -85,7 +88,7 @@ export default new Vuex.Store({
       // add 'deleting:true' property to user being deleted
 
       // state.all.items = state.all.items.map(user =>
-      state.users = state.users.map( user =>
+      state.users = state.users.map(user =>
         user.id === id ? { ...user, deleting: true } : user
       );
     },
@@ -110,6 +113,18 @@ export default new Vuex.Store({
 
         return user;
       });
+    },
+
+    // Loads management
+    getAssignedLoadsRequest(state) {
+      state.all = { loading: true };
+    },
+    getAssignedLoadsSuccess(state, loads) {
+      console.dir(loads);
+      state.loads = loads;
+    },
+    getAssignedLoadsFailure(state, error) {
+      state.all = { error };
     },
   },
 
@@ -186,9 +201,22 @@ export default new Vuex.Store({
         error => commit('deleteFailure', { id, error: error.toString() })
       );
     },
+
+    // Loads management
+    getAssigned({ commit }) {
+      commit('getAssignedLoadsRequest');
+
+      LoadService.getAssigned().then(
+        resp => commit('getAssignedLoadsSuccess', resp.loads),
+        error => commit('getAssignedLoadsFailure', error)
+      );
+    },
   },
 
   modules: {
-    // account,
+    // user
+    // account
+    // load
+    // truck
   },
 });
