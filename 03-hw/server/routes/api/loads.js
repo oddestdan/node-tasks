@@ -4,14 +4,14 @@ const router = express.Router();
 const Load = require('../../models/Load');
 const User = require('../../models/User');
 
-const getUserByUserPass = async user => {
+const getUserByUserPass = user => {
   const { username, password } = user;
   return User.findOne({ username, password });
 };
 
 // Get Created Loads or Get Assigned Loads
 router.get('/loads', async (req, res) => {
-  const { _id } = await getUserByUserPass(req.user);
+  const { username, _id } = await getUserByUserPass(req.user);
 
   Load.find({
     $or: [{ creatorId: _id }, { assigneeId: _id }]
@@ -20,7 +20,9 @@ router.get('/loads', async (req, res) => {
       if (loads.length) {
         res.json({ status: 'ok', loads });
       } else {
-        res.status(400).json({ status: 'No loads found' });
+        res
+          .status(400)
+          .json({ status: `No loads found for user: ${username}` });
       }
     })
     .catch(e => {
@@ -48,10 +50,10 @@ router.post('/loads', async (req, res) => {
   // payload: Specified at UI (Number)
 
   const { dimensions, payload } = req.body;
-  const user = await getUserByUserPass(req.user);
-  if (user.role === 'shipper') {
-    const creatorId = user._id;
-    const load = new Load({ dimensions, payload, creatorId });
+  const { role, _id } = await getUserByUserPass(req.user);
+
+  if (role === 'shipper') {
+    const load = new Load({ dimensions, payload, creatorId: _id });
 
     load
       .save()

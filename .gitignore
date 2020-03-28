@@ -8,3 +8,4 @@ node_modules/
 
 # production
 /build
+03-hw/server/logs/logs.json
