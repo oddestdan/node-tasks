@@ -32,6 +32,7 @@ module.exports = {
     'require-jsdoc': 'off',
     'comma-dangle': 'off',
     indent: 'off',
+    'linebreak-style': 0,
     // 'no-invalid-this': 'off',
   },
 };
