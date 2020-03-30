@@ -6,18 +6,32 @@ const User = require('../../models/User');
 const jwt = require('jsonwebtoken');
 const { secret } = require('config').get('jwt');
 
-router.post('/login', (req, res) => {
-  const userData = ({ username, password } = req.body);
+router.post('/login', async (req, res) => {
+  const { username, password } = req.body;
 
-  User.findOne(userData)
+  User.findOne({ username })
     .then(user => {
       if (user) {
-        const jwtoken = jwt.sign(userData, secret, {
-          expiresIn: 604800 // 1 week
+        // Found username in database
+        user.validatePassword(password).then(matches => {
+          if (matches) {
+            // Entered password matches username
+            const jwtoken = jwt.sign({ username, password }, secret, {
+              expiresIn: 604800 // 1 week
+            });
+            res.json({
+              status: 'User logged in',
+              token: `JWT ${jwtoken}`,
+              user
+            });
+          } else {
+            res.status(401).json({
+              status: `Password for username ${username} is incorrect`
+            });
+          }
         });
-        res.json({ status: 'User logged in', token: `JWT ${jwtoken}`, user });
       } else {
-        res.status(401).json({ status: 'User not found' });
+        res.status(401).json({ status: `Username ${username} was not found` });
       }
     })
     .catch(e => {
