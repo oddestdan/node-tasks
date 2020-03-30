@@ -1,8 +1,7 @@
 const express = require('express');
 const router = express.Router();
 
-const Load = require('../../models/Load');
-const User = require('../../models/User');
+const { User, Load } = require('../../models');
 
 const getUserByUserPass = user => {
   const { username, password } = user;

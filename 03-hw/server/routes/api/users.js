@@ -4,7 +4,7 @@ const router = express.Router();
 const bcrypt = require('bcryptjs');
 const { saltFactor } = require('config').get('password');
 
-const User = require('../../models/User');
+const { User } = require('../../models');
 
 // Get All Users
 router.get('/users', (req, res) => {
