@@ -1,7 +1,10 @@
 const express = require('express');
 const router = express.Router();
 
-const User = require('../../models/User');
+const bcrypt = require('bcryptjs');
+const { saltFactor } = require('config').get('password');
+
+const { User } = require('../../models');
 
 // Get All Users
 router.get('/users', (req, res) => {
@@ -24,29 +27,41 @@ router.get('/users/:id', (req, res) => {
 // Create User
 // Handled by 'register'
 
-// Update whole User
-router.put('/users/:id', (req, res) => {
-  User.findByIdAndUpdate(req.params.id, {
-    username: req.body.username,
-    password: req.body.password,
-    role: req.body.role,
-    description: req.body.description
-  })
-    .then(user => res.json({ status: 'ok', user }))
-    .catch(e => {
-      res.status(500).json({ status: e.message });
-    });
-});
+// // Update whole User
+// router.put('/users/:id', (req, res) => {
+//   User.findByIdAndUpdate(req.params.id, {
+//     username: req.body.username,
+//     password: req.body.password,
+//     role: req.body.role,
+//     description: req.body.description
+//   })
+//     .then(user => res.json({ status: 'ok', user }))
+//     .catch(e => {
+//       res.status(500).json({ status: e.message });
+//     });
+// });
 
 // Update User password
-router.patch('/users/:id', (req, res) => {
-  User.findByIdAndUpdate(req.params.id, {
-    password: req.body.password
-  })
-    .then(user => res.json({ status: 'ok', user }))
-    .catch(e => {
-      res.status(500).json({ status: e.message });
-    });
+router.patch('/users/:id', async (req, res) => {
+  let { password } = req.body;
+
+  try {
+    const validation = User.joiValidate({ password });
+    if (validation.error) {
+      return res.status(422).json({ status: validation.error.message });
+    }
+
+    const salt = await bcrypt.genSalt(saltFactor);
+    password = await bcrypt.hash(password, salt);
+
+    User.findByIdAndUpdate(req.params.id, { password })
+      .then(user => res.json({ status: 'ok', user }))
+      .catch(e => {
+        res.status(500).json({ status: e.message });
+      });
+  } catch (error) {
+    console.log(error);
+  }
 });
 
 // Delete User

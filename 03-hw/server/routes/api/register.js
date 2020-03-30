@@ -1,27 +1,27 @@
 const express = require('express');
-// const mongoose = require('mongoose');
+const mongoose = require('mongoose');
 // const jwt = require('jsonwebtoken');
 const router = express.Router();
-// const bcrypt = require('bcryptjs');
 
-const User = require('../../models/User');
+const { User } = require('../../models');
 
 router.post('/register', (req, res) => {
   const userData = ({ username, password, role } = req.body);
 
-  // // asynchronous
-  // bcrypt.genSalt(10, (err, salt) => {
-  //   bcrypt.hash(password, salt, (err, hash) => {
-  //     password = hash;
-  //   });
-  // });
+  const validation = User.joiValidate(userData);
+  if (validation.error) {
+    return res.status(422).json({ status: validation.error.message });
+  }
 
   const user = new User(userData);
 
   user
     .save()
     .then(() => {
-      res.json({ status: 'New user created', user });
+      res.json({
+        status: 'New user created',
+        user
+      });
     })
     .catch(e => {
       res.status(500).json({ status: e.message });

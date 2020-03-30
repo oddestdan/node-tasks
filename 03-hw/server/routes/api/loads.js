@@ -1,17 +1,11 @@
 const express = require('express');
 const router = express.Router();
 
-const Load = require('../../models/Load');
-const User = require('../../models/User');
-
-const getUserByUserPass = user => {
-  const { username, password } = user;
-  return User.findOne({ username, password });
-};
+const { User, Load } = require('../../models');
 
 // Get Created Loads or Get Assigned Loads
 router.get('/loads', async (req, res) => {
-  const { username, _id } = await getUserByUserPass(req.user);
+  const { username, _id } = await User.findOne({ _id: req.user.userId });
 
   Load.find({
     $or: [{ creatorId: _id }, { assigneeId: _id }]
@@ -50,7 +44,12 @@ router.post('/loads', async (req, res) => {
   // payload: Specified at UI (Number)
 
   const { dimensions, payload } = req.body;
-  const { role, _id } = await getUserByUserPass(req.user);
+  const { role, _id } = await User.findOne({ _id: req.user.userId });
+
+  const validation = Load.joiValidate({ dimensions, payload });
+  if (validation.error) {
+    return res.status(422).json({ status: validation.error.message });
+  }
 
   if (role === 'shipper') {
     const load = new Load({ dimensions, payload, creatorId: _id });
@@ -70,6 +69,11 @@ router.post('/loads', async (req, res) => {
 
 // Update Load if NEW
 router.put('/loads/:id', (req, res) => {
+  const validation = Load.joiValidate(req.body);
+  if (validation.error) {
+    return res.status(422).json({ status: validation.error.message });
+  }
+
   Load.findByIdAndUpdate(req.params.id, req.body)
     .then(load => {
       if (load.status === 'NEW') {
@@ -85,9 +89,14 @@ router.put('/loads/:id', (req, res) => {
 
 // Update Load status
 router.patch('/loads/status/:id', (req, res) => {
-  Load.findByIdAndUpdate(req.params.id, {
-    status: req.body.status
-  })
+  const { status } = req.body;
+
+  const validation = Load.joiValidate({ status });
+  if (validation.error) {
+    return res.status(422).json({ status: validation.error.message });
+  }
+
+  Load.findByIdAndUpdate(req.params.id, { status })
     .then(load => res.json({ status: 'ok', load }))
     .catch(e => {
       res.status(500).json({ status: e.message });

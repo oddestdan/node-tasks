@@ -1,28 +1,48 @@
 const express = require('express');
 const router = express.Router();
 
-const User = require('../../models/User');
+const bcrypt = require('bcryptjs');
+const { saltFactor } = require('config').get('password');
 
 const jwt = require('jsonwebtoken');
 const { secret } = require('config').get('jwt');
 
-router.post('/login', (req, res) => {
-  const userData = ({ username, password } = req.body);
+const { User } = require('../../models');
 
-  User.findOne(userData)
-    .then(user => {
-      if (user) {
-        const jwtoken = jwt.sign(userData, secret, {
-          expiresIn: 604800 // 1 week
-        });
-        res.json({ status: 'User logged in', token: `JWT ${jwtoken}`, user });
-      } else {
-        res.status(401).json({ status: 'User not found' });
-      }
-    })
-    .catch(e => {
-      res.status(500).json({ status: e.message });
+router.post('/login', async (req, res) => {
+  const { username, password } = req.body;
+
+  try {
+    const user = await User.findOne({ username });
+
+    if (!user) {
+      return res.status(401).json({
+        status: `Username ${username} was not found`
+      });
+    }
+
+    const validation = User.joiValidate({ username, password });
+    if (validation.error) {
+      return res.status(422).json({ status: validation.error.message });
+    }
+
+    if (!(await user.validatePassword(password))) {
+      return res.status(401).json({
+        status: `Password for username ${username} is incorrect`
+      });
+    }
+
+    const jwtoken = jwt.sign({ userId: user._id }, secret, {
+      expiresIn: 604800 // 1 week
     });
+    return res.json({
+      status: 'User logged in',
+      token: `JWT ${jwtoken}`,
+      user
+    });
+  } catch (error) {
+    return res.status(500).json({ status: error.message });
+  }
 });
 
 module.exports = router;
