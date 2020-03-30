@@ -1,5 +1,5 @@
-const User = require('./User.js');
-const Load = require('./Load.js');
-const Truck = require('./Truck.js');
+const User = require('./User');
+const Load = require('./Load');
+const Truck = require('./Truck');
 
 module.exports = { User, Load, Truck };

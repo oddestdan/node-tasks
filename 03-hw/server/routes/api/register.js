@@ -7,13 +7,20 @@ const { User } = require('../../models');
 
 router.post('/register', (req, res) => {
   const userData = ({ username, password, role } = req.body);
-
   const user = new User(userData);
+
+  const validation = user.joiValidate(userData);
+  if (validation.error) {
+    return res.status(422).json({ status: validation.error.message });
+  }
 
   user
     .save()
     .then(() => {
-      res.json({ status: 'New user created', user });
+      res.json({
+        status: 'New user created',
+        user
+      });
     })
     .catch(e => {
       res.status(500).json({ status: e.message });
