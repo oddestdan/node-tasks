@@ -67,9 +67,7 @@ router.post('/trucks', async (req, res) => {
         res.json({ status: 'New truck created', truck });
       })
       .catch(e => {
-        res.status(500).json({
-          status: e.message
-        });
+        res.status(500).json({ status: e.message });
       });
   } else {
     res.status(400).json({
