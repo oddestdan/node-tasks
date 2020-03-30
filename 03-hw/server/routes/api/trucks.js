@@ -3,11 +3,6 @@ const router = express.Router();
 
 const { User, Truck } = require('../../models');
 
-const getUserByUserPass = user => {
-  const { username, password } = user;
-  return User.findOne({ username, password });
-};
-
 // Get All Trucks
 router.get('/trucks', (req, res) => {
   Truck.find()
@@ -21,7 +16,8 @@ router.get('/trucks', (req, res) => {
 
 // Get Created Trucks
 router.get('/trucks/created', async (req, res) => {
-  const { _id } = await getUserByUserPass(req.user);
+  // const { _id } = await getUserById(req.user);
+  const { _id } = await User.findOne({ _id: req.user.userId });
 
   Truck.find({ creatorId: _id })
     .then(trucks => {
@@ -56,9 +52,14 @@ router.post('/trucks', async (req, res) => {
   // // 700x350x200, 4000 - LARGE_STRAIGHT
 
   const { type } = req.body;
-  const { role, _id } = await getUserByUserPass(req.user);
+  const { role, _id } = await User.findOne({ _id: req.user.userId });
 
   if (role === 'driver') {
+    const validation = Truck.joiValidate({ type });
+    if (validation.error) {
+      return res.status(422).json({ status: validation.error.message });
+    }
+
     const truck = new Truck({ type, creatorId: _id });
 
     truck
@@ -78,7 +79,7 @@ router.post('/trucks', async (req, res) => {
 
 // Assign Truck to Self
 router.patch('/trucks/assign/:id', async (req, res) => {
-  const { _id } = await getUserByUserPass(req.user);
+  const { _id } = await User.findOne({ _id: req.user.userId });
 
   Truck.findByIdAndUpdate(req.params.id, { assigneeId: _id })
     .then(truck => {
@@ -91,8 +92,13 @@ router.patch('/trucks/assign/:id', async (req, res) => {
 
 // Update Truck Info
 router.put('/trucks/:id', async (req, res) => {
-  const { role } = await getUserByUserPass(req.user);
+  const { role } = await User.findOne({ _id: req.user.userId });
   if (role === 'driver') {
+    const validation = Truck.joiValidate(req.body);
+    if (validation.error) {
+      return res.status(422).json({ status: validation.error.message });
+    }
+
     Truck.findByIdAndUpdate(req.params.id, req.body)
       .then(truck => res.json({ status: 'ok', truck }))
       .catch(e => {
@@ -107,7 +113,7 @@ router.put('/trucks/:id', async (req, res) => {
 
 // Delete Truck
 router.delete('/trucks/:id', async (req, res) => {
-  const { role } = await getUserByUserPass(req.user);
+  const { role } = await User.findOne({ _id: req.user.userId });
   if (role === 'driver') {
     Truck.findByIdAndDelete(req.params.id)
       .then(truck => res.json({ status: 'ok' }))

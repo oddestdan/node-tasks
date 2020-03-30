@@ -46,6 +46,11 @@ router.patch('/users/:id', async (req, res) => {
   let { password } = req.body;
 
   try {
+    const validation = User.joiValidate({ password });
+    if (validation.error) {
+      return res.status(422).json({ status: validation.error.message });
+    }
+
     const salt = await bcrypt.genSalt(saltFactor);
     password = await bcrypt.hash(password, salt);
 

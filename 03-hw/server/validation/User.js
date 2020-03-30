@@ -5,13 +5,13 @@ const phoneRegex = /^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-\s\./0-9]*$/;
 
 module.exports = Joi.object().keys({
   username: Joi.string()
-    .required()
+    // .required()
     .alphanum()
-    .min(4)
+    .min(3)
     .max(30)
     .label('Username'),
   password: Joi.string()
-    .required()
+    // .required()
     .regex(passwRegex)
     // .options({
     //   language: { // for some reason is not supported
@@ -24,7 +24,7 @@ module.exports = Joi.object().keys({
     // })
     .label('Password'),
   role: Joi.string()
-    .required()
+    // .required()
     .valid('shipper', 'driver', 'admin')
     .label('Role'),
   email: Joi.string()
@@ -36,6 +36,5 @@ module.exports = Joi.object().keys({
   info: Joi.string()
     .alphanum()
     .max(120)
-    .label('Info'),
-  created: Joi.date()
+    .label('Info')
 });

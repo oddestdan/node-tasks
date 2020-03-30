@@ -1,13 +1,13 @@
 const mongoose = require('mongoose');
 
+const { TruckValidation } = require('../validation');
+
 const TruckSchema = new mongoose.Schema(
   {
     creatorId: { type: String, required: true },
     assigneeId: { type: String, default: '' },
     status: { type: String, default: '' },
-    // status: ['IS' | 'OL']
-    // // IS => IN_SERVICE
-    // // OL => ON_LOAD
+    // status: ['IN_SERVICE' | 'ON_LOAD']
     type: { type: String, default: 'SPRINTER' }
     // type: is one of the hardcoded ones
     // // 300x250x170, 1700 - SPRINTER
@@ -18,6 +18,8 @@ const TruckSchema = new mongoose.Schema(
     timestamps: true
   }
 );
+
+TruckSchema.statics.joiValidate = data => TruckValidation.validate(data);
 
 const Truck = mongoose.model('Truck', TruckSchema);
 

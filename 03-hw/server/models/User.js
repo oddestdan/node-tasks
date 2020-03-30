@@ -3,7 +3,6 @@ const bcrypt = require('bcryptjs');
 const { saltFactor } = require('config').get('password');
 
 const { UserValidation } = require('../validation');
-const Joi = require('@hapi/joi');
 
 const UserSchema = new mongoose.Schema(
   {
@@ -52,7 +51,7 @@ UserSchema.methods.validatePassword = async function(candidatePassword) {
   return bcrypt.compare(candidatePassword, this.password);
 };
 
-UserSchema.methods.joiValidate = data => UserValidation.validate(data);
+UserSchema.statics.joiValidate = data => UserValidation.validate(data);
 
 const User = mongoose.model('User', UserSchema);
 
