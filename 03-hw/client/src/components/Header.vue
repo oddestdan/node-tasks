@@ -4,6 +4,8 @@
     <span class="header__separator">|</span>
     <router-link class="header__link" to="/users">Users</router-link>
     <span class="header__separator">|</span>
+    <router-link class="header__link" to="/profile">Profile</router-link>
+    <span class="header__separator">|</span>
     <router-link class="header__link" to="/login">Log in</router-link>
     <span class="header__separator">|</span>
     <router-link class="header__link" to="/register">Sign up</router-link>

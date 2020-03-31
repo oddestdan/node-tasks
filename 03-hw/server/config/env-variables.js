@@ -13,6 +13,9 @@ const config = {
   },
   jwt: {
     secret: 'JWT_SECRET'
+  },
+  password: {
+    saltFactor: 'PASSWORD_SALT_FACTOR'
   }
 };
 

@@ -26,6 +26,10 @@ npm i
 npm run start
 ```
 
-## Project development:
+## Project development
 
 [Scrum Board](https://trello.com/b/5WFzOL8H/uber)
+
+## Git Flow
+
+Branch management using [Atlassian Git Flow Workflow](https://www.atlassian.com/git/tutorials/comparing-workflows/gitflow-workflow)
