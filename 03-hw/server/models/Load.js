@@ -1,14 +1,15 @@
 const mongoose = require('mongoose');
 
 const { LoadValidation } = require('../validation');
+const { statuses, loadStates } = require('../globals');
 
 const LoadSchema = new mongoose.Schema(
   {
     creatorId: { type: String, required: true },
     assigneeId: { type: String, default: '' },
     logs: { type: Object, default: [] },
-    status: { type: String, default: 'NEW' },
-    state: { type: String, default: '' },
+    status: { type: String, default: statuses.load['inService'] },
+    state: { type: String, default: loadStates['empty'] },
     dimensions: {
       type: Object,
       // required: true,
