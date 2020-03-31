@@ -78,16 +78,27 @@ router.post('/trucks', async (req, res) => {
 });
 
 // Assign Truck to Self
-router.patch('/trucks/assign/:id', async (req, res) => {
+router.patch('/trucks/:id/assign', async (req, res) => {
   const { _id } = await User.findOne({ _id: req.user.userId });
+  const truckId = req.params.id;
 
-  Truck.findByIdAndUpdate(req.params.id, { assigneeId: _id })
-    .then(truck => {
-      res.json({ status: 'ok', truck });
-    })
-    .catch(e => {
-      res.status(500).json({ status: e.message });
-    });
+  const userAssignedTruck = await Truck.findOne({ assigneeId: _id });
+  if (userAssignedTruck) {
+    // Reset already assigned truck
+    userAssignedTruck.assigneeId = '';
+    await userAssignedTruck.save();
+  }
+
+  try {
+    const truck = await Truck.findByIdAndUpdate(truckId, { assigneeId: _id });
+    if (!truck) {
+      return res.status(404).json({ status: `Truck ${truckId} not found` });
+    }
+
+    return res.json({ status: 'ok', truck });
+  } catch (error) {
+    return res.status(500).json({ status: error.message });
+  }
 });
 
 // Update Truck Info
