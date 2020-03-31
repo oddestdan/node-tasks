@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 
 const { User, Load, Truck } = require('../../models');
-const { statuses, truckTypeInfo } = require('../../globals');
+const { statuses, truckTypeInfo, loadStates } = require('../../globals');
 
 // Get Created Loads or Get Assigned Loads
 router.get('/loads', async (req, res) => {
@@ -116,6 +116,14 @@ router.patch('/loads/:id/post', async (req, res) => {
 
     load.assigneeId = truckCandidate.assigneeId;
     load.status = statuses.load['assigned'];
+    load.state = loadStates['erPickUp'];
+    load.logs = [
+      ...load.logs,
+      {
+        message: `Found fitting truck. State update: ${load.state}`,
+        time: new Date().toISOString()
+      }
+    ];
     await load.save();
 
     return res.json({
@@ -139,6 +147,10 @@ router.put('/loads/:id', async (req, res) => {
     const load = await Load.findById(req.params.id);
     if (load.status === 'NEW') {
       Object.assign(load, req.body);
+      load.logs = [
+        ...load.logs,
+        { message: `Updated load`, time: new Date().toISOString() }
+      ];
       await load.save();
 
       res.json({ status: 'ok', load });
@@ -150,20 +162,44 @@ router.put('/loads/:id', async (req, res) => {
   }
 });
 
-// Update Load status
-router.patch('/loads/:id/status', (req, res) => {
-  const { status } = req.body;
+// Update Load status (for driver)
+router.patch('/loads/:id/status', async (req, res) => {
+  const user = await User.findOne({ _id: req.user.userId });
 
-  const validation = Load.joiValidate({ status });
-  if (validation.error) {
-    return res.status(422).json({ status: validation.error.message });
+  if (user.role === 'driver') {
+    try {
+      const { state } = req.body;
+
+      const validation = Load.joiValidate({ state });
+      if (validation.error) {
+        return res.status(422).json({ status: validation.error.message });
+      }
+
+      // Update Load info
+      const load = await Load.findById(req.params.id);
+      load.state = state;
+      load.logs = [
+        ...load.logs,
+        { message: `State update: ${state}`, time: new Date().toISOString() }
+      ];
+      if (state === loadStates['arDelivery']) {
+        // Load reached delivery destination
+        load.status = statuses.load['shipped'];
+
+        // Reset Truck availability
+        const truck = await Truck.findOne({ assigneeId: user._id });
+        truck.status = statuses.truck['inService'];
+        await truck.save();
+      }
+      await load.save();
+
+      res.json({ status: `Load state updated: ${state}` });
+    } catch (error) {
+      res.status(500).json({ status: error.message });
+    }
+  } else {
+    res.status(400).json({ status: 'Shipper is unable to update load status' });
   }
-
-  Load.findByIdAndUpdate(req.params.id, { status })
-    .then(load => res.json({ status: 'ok', load }))
-    .catch(e => {
-      res.status(500).json({ status: e.message });
-    });
 });
 
 // Delete Load if NEW
