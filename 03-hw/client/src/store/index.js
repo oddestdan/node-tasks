@@ -1,6 +1,8 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
 
+import router from '../router/';
+
 import UserService from '../services/UserService';
 import LoadService from '../services/LoadService';
 
@@ -75,7 +77,6 @@ export default new Vuex.Store({
       state.all = { loading: true };
     },
     getAllSuccess(state, users) {
-      console.dir(users);
       state.users = users;
     },
     getAllFailure(state, error) {
@@ -120,7 +121,6 @@ export default new Vuex.Store({
       state.all = { loading: true };
     },
     getAssignedLoadsSuccess(state, loads) {
-      console.dir(loads);
       state.loads = loads;
     },
     getAssignedLoadsFailure(state, error) {
@@ -147,7 +147,7 @@ export default new Vuex.Store({
       UserService.login(username, password).then(
         user => {
           commit('loginSuccess', user);
-          // router.push('/');
+          router.push('/');
         },
         error => {
           commit('loginFailure', error);
@@ -165,7 +165,7 @@ export default new Vuex.Store({
       UserService.register(user).then(
         user => {
           commit('registerSuccess', user);
-          // router.push('/login');
+          router.push('/login');
           setTimeout(() => {
             // display success message after route change completes
             dispatch('success', 'Registration successful', {
@@ -185,21 +185,31 @@ export default new Vuex.Store({
       commit('getAllRequest');
 
       UserService.getAll().then(
-        resp => commit('getAllSuccess', resp.users),
+        users => commit('getAllSuccess', users),
         error => commit('getAllFailure', error)
       );
     },
 
     remove({ commit }, id) {
-      commit('deleteRequest', id);
-
-      UserService.remove(id).then(
-        user => {
-          console.log(user);
-          commit('deleteSuccess', user.id);
-        },
-        error => commit('deleteFailure', { id, error: error.toString() })
+      const agreed = window.confirm(
+        'Are you sure you want to delete your account?'
       );
+
+      if (agreed) {
+        commit('deleteRequest', id);
+
+        UserService.remove(id).then(
+          user => {
+            commit('deleteSuccess', user.id);
+
+            // logout self-deleted user
+            UserService.logout();
+            commit('logout');
+            router.push('/login');
+          },
+          error => commit('deleteFailure', { id, error: error.toString() })
+        );
+      }
     },
 
     // Loads management

@@ -2,7 +2,7 @@ import { auth, handleResponse } from '../helpers';
 
 const baseURL = 'http://localhost:8081/api';
 
-export default {
+const service = {
   async login(username, password) {
     const requestConfig = {
       method: 'POST',
@@ -11,13 +11,17 @@ export default {
     };
 
     const response = await fetch(`${baseURL}/login`, requestConfig);
-    const user = await handleResponse(response);
+    const { user, status, token } = await handleResponse(response);
+
     // login successful if there's a jwt token in the response
-    if (user.token) {
+    if (token) {
+      // assign JWT Token to the user to store in LS
+      user.token = token;
       // store user details and jwt token in local storage
       // to keep user logged in between page refreshes
       localStorage.setItem('user', JSON.stringify(user));
     }
+    console.log('Response status:', status);
     return user;
   },
 
@@ -26,16 +30,17 @@ export default {
     localStorage.removeItem('user');
   },
 
-  async register(user) {
-    // registerUser
+  async register(userData) {
     const requestConfig = {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(user),
+      body: JSON.stringify(userData),
     };
 
     const response = await fetch(`${baseURL}/register`, requestConfig);
-    return handleResponse(response);
+    const { user, status } = await handleResponse(response);
+    console.log('Response status:', status);
+    return user;
   },
 
   async getAll() {
@@ -45,7 +50,9 @@ export default {
     };
 
     const response = await fetch(`${baseURL}/users`, requestConfig);
-    return handleResponse(response);
+    const { users, status } = await handleResponse(response);
+    console.log('Response status:', status);
+    return users;
   },
 
   async getById(id) {
@@ -55,21 +62,44 @@ export default {
     };
 
     const response = await fetch(`${baseURL}/users/${id}`, requestConfig);
-    return handleResponse(response);
+    const { user, status } = await handleResponse(response);
+    console.log('Response status:', status);
+    return user;
   },
 
-  async update(user) {
+  async update(userData) {
     const requestConfig = {
       method: 'PUT',
       headers: { ...auth(), 'Content-Type': 'application/json' },
-      body: JSON.stringify(user),
+      body: JSON.stringify(userData),
     };
 
-    const response = await fetch(`${baseURL}/users/${user.id}`, requestConfig);
-    return handleResponse(response);
+    const response = await fetch(
+      `${baseURL}/users/${userData.id}`,
+      requestConfig
+    );
+    const { user, status } = await handleResponse(response);
+    console.log('Response status:', status);
+    return user;
   },
 
-  // remove because delete is a reserved word in JS
+  async updatePassword(userData) {
+    const requestConfig = {
+      method: 'PATCH',
+      headers: { ...auth(), 'Content-Type': 'application/json' },
+      body: JSON.stringify(userData),
+    };
+
+    const response = await fetch(
+      `${baseURL}/users/${userData.id}`,
+      requestConfig
+    );
+    const { user, status } = await handleResponse(response);
+    console.log('Response status:', status);
+    return user;
+  },
+
+  // "remove" because delete is a reserved word in JS
   async remove(id) {
     const requestConfig = {
       method: 'DELETE',
@@ -77,6 +107,10 @@ export default {
     };
 
     const response = await fetch(`${baseURL}/users/${id}`, requestConfig);
-    return handleResponse(response);
+    const { user, status } = await handleResponse(response);
+    console.log('Response status:', status);
+    return user;
   },
 };
+
+export default service;

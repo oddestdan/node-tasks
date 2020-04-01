@@ -1,6 +1,6 @@
 <template>
   <div class="home">
-    <h1>Welcome to Uber App</h1>
+    <h1>Welcome to Uber App, {{ $store.state.user.username }}</h1>
   </div>
 </template>
 

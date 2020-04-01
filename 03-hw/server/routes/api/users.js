@@ -98,7 +98,7 @@ router.delete('/users/:id', (req, res) => {
   }
 
   User.findByIdAndDelete(req.params.id)
-    .then(user => res.json({ status: `User ${user.username} deleted` }))
+    .then(user => res.json({ status: `User ${user.username} deleted`, user }))
     .catch(e => {
       res.status(500).json({ status: e.message });
     });

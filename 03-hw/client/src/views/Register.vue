@@ -100,8 +100,6 @@ export default {
       this.submitted = true;
       if (this.user.username && this.user.password) {
         await this.register(this.user);
-        // TODO: needs to change for successful login
-        this.$router.push('/');
       }
     },
   },

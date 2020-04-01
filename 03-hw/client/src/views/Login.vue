@@ -29,9 +29,7 @@
         </div>
       </div>
       <div class="form-group">
-        <button class="btn btn-dark" :disabled="status.loggingIn">
-          Login
-        </button>
+        <button class="btn btn-dark" :disabled="status.loggingIn">Login</button>
         <!-- <img v-show="status.loggingIn" /> -->
         <router-link to="/register" class="btn btn-link">Sign up</router-link>
       </div>
@@ -70,8 +68,6 @@ export default {
       this.submitted = true;
       if (this.user.username && this.user.password) {
         await this.login(this.user);
-        // TODO: needs to change for successful login
-        this.$router.push('/');
       }
     },
   },
