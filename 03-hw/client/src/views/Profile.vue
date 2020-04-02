@@ -21,7 +21,7 @@
 
           <div class="w-100 d-none d-md-block"></div>
 
-          <div class="col-6">Role (select)</div>
+          <div class="col-6">Role</div>
           <div class="col-6">{{user.role}}</div>
 
           <div class="w-100 d-none d-md-block"></div>
@@ -41,7 +41,7 @@
           <div class="w-100 d-none d-md-block"></div>
           <br />
 
-          <button @click="handlePasswordClick" class="col-6">Reset Password</button>
+          <button @click="handlePasswordClick" class="col-6 btn btn-dark">Reset Password</button>
           <div class="col-6">
             <input v-model="newPassword" placeholder="Enter new password" />
           </div>
@@ -53,21 +53,17 @@
     <div class="container">
       <div class="row">
         <div class="col">
-          <h2>
-            {{
-            user.role === 'driver' ? 'Assigned' : 'Created'
-            }} Loads
-          </h2>
+          <!-- <div class="row d-flex justify-content-between"> -->
+          <div class="row">
+            <h2>{{isDriver ? 'Assigned' : 'Created'}} Loads</h2>
+            <button @click="handleCreateLoadClick" class="btn btn-link">Create New Load</button>
+          </div>
           <section class="panel panel-success" v-if="loads.length">
             <!-- <div class="panel-heading">List of users</div> -->
             <table class="table table-striped">
               <tr>
                 <th>Load ID</th>
-                <th>
-                  {{
-                  user.role === 'driver' ? 'Created by' : 'Assigned to'
-                  }}
-                </th>
+                <th>{{isDriver ? 'Created by' : 'Assigned to'}}</th>
                 <th>Status</th>
                 <th>State</th>
                 <th>Dimensions</th>
@@ -78,7 +74,7 @@
                 <td>{{ load._id }}</td>
                 <td>
                   {{
-                  user.role === 'driver' ? load.creatorId : load.assigneeId
+                  isDriver ? load.creatorId : load.assigneeId
                   }}
                 </td>
                 <td>{{ load.status }}</td>
@@ -89,15 +85,17 @@
                   <p class="dimensions">L :{{ load.dimensions['length'] }}</p>
                 </td>
                 <td>{{ load.payload }}</td>
+                <td
+                  class="actions"
+                  v-if="load.status === 'NEW'"
+                  @click="() => handleDeleteLoadClick(load._id)"
+                >x</td>
                 <!-- <td>{{ load.logs }}</td> -->
               </tr>
             </table>
           </section>
           <section class="panel panel-danger" v-else>
-            <p>
-              No loads {{ user.role === 'driver' ?
-              'assigned' : 'created' }} yet...
-            </p>
+            <p>No loads {{ isDriver ? 'assigned' : 'created' }} yet...</p>
           </section>
         </div>
       </div>
@@ -120,26 +118,26 @@ export default {
   computed: {
     ...mapState({
       user: state => state.user,
+      isDriver: state => state.user.role === 'shipper',
       loads: state => state.loads,
     }),
   },
 
   methods: {
-    ...mapActions({
-      getLoads: 'getLoads',
-      updateAccountInfo: 'updateAccountInfo',
-      updatePassword: 'updatePassword',
-    }),
+    ...mapActions([
+      'getLoads',
+      'updateAccountInfo',
+      'updatePassword',
+      'removeLoad',
+    ]),
 
     handlePhoneChange(e) {
-      console.log('Updating phone value', e.target.value);
       const { _id, phone } = this.user;
       const data = { phone };
       this.updateAccountInfo({ _id, data });
     },
 
     handleEmailChange(e) {
-      console.log('Updating email value', e.target.value);
       const { _id, email } = this.user;
       const data = { email };
       this.updateAccountInfo({ _id, data });
@@ -150,6 +148,14 @@ export default {
       const data = { password: this.newPassword };
       this.updatePassword({ _id, data });
       this.newPassword = ''; // reset
+    },
+
+    handleCreateLoadClick(e) {
+      this.$router.push('/loads/new');
+    },
+
+    handleDeleteLoadClick(id) {
+      this.removeLoad(id);
     },
   },
 

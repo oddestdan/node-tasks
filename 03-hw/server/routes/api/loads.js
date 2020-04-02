@@ -15,7 +15,7 @@ router.get('/loads', async (req, res) => {
   })
     .then(loads => {
       if (loads.length) {
-        res.json({ status: 'ok', loads });
+        res.json({ status: 'Showing all loads', loads });
       } else {
         res
           .status(404)
@@ -30,7 +30,7 @@ router.get('/loads', async (req, res) => {
 // Get Load
 router.get('/loads/:id', (req, res) => {
   Load.findById(req.params.id)
-    .then(load => res.json({ status: 'ok', load }))
+    .then(load => res.json({ status: `Showing load ${load._id}`, load }))
     .catch(e => {
       res.status(500).json({ status: e.message });
     });
@@ -137,7 +137,7 @@ router.put('/loads/:id', async (req, res) => {
       ];
       await load.save();
 
-      res.json({ status: 'ok', load });
+      res.json({ status: `Updated load ${load._id}`, load });
     } else {
       res.status(400).json({ status: 'Load is no longer NEW' });
     }
@@ -197,7 +197,7 @@ router.delete('/loads/:id', async (req, res) => {
     if (load.status === 'NEW') {
       await load.deleteOne();
 
-      res.json({ status: 'ok' });
+      res.json({ status: 'Load deleted', load });
     } else {
       res.status(400).json({ status: 'Load is no longer NEW' });
     }

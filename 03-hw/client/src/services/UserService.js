@@ -1,6 +1,5 @@
 import { auth, handleResponse } from '../helpers';
-
-const baseURL = 'http://localhost:8081/api';
+import { BASE_URL } from '../globals';
 
 const service = {
   async login(username, password) {
@@ -10,7 +9,7 @@ const service = {
       body: JSON.stringify({ username, password }),
     };
 
-    const response = await fetch(`${baseURL}/login`, requestConfig);
+    const response = await fetch(`${BASE_URL}/login`, requestConfig);
     const { user, status, token } = await handleResponse(response);
 
     // login successful if there's a jwt token in the response
@@ -37,7 +36,7 @@ const service = {
       body: JSON.stringify(userData),
     };
 
-    const response = await fetch(`${baseURL}/register`, requestConfig);
+    const response = await fetch(`${BASE_URL}/register`, requestConfig);
     const { user, status } = await handleResponse(response);
     console.log('Response status:', status);
     return user;
@@ -49,7 +48,7 @@ const service = {
       headers: auth(),
     };
 
-    const response = await fetch(`${baseURL}/users`, requestConfig);
+    const response = await fetch(`${BASE_URL}/users`, requestConfig);
     const { users, status } = await handleResponse(response);
     console.log('Response status:', status);
     return users;
@@ -61,39 +60,33 @@ const service = {
       headers: auth(),
     };
 
-    const response = await fetch(`${baseURL}/users/${id}`, requestConfig);
+    const response = await fetch(`${BASE_URL}/users/${id}`, requestConfig);
     const { user, status } = await handleResponse(response);
     console.log('Response status:', status);
     return user;
   },
 
   async update({ _id, data }) {
-    console.log('in update');
-    console.log(_id);
-    console.log(data);
     const requestConfig = {
       method: 'PUT',
       headers: { ...auth(), 'Content-Type': 'application/json' },
       body: JSON.stringify(data),
     };
 
-    const response = await fetch(`${baseURL}/users/${_id}`, requestConfig);
+    const response = await fetch(`${BASE_URL}/users/${_id}`, requestConfig);
     const { user, status } = await handleResponse(response);
     console.log('Response status:', status);
     return user;
   },
 
   async updatePassword({ _id, data }) {
-    console.log('in updatePassword');
-    console.log(_id);
-    console.log(data);
     const requestConfig = {
       method: 'PATCH',
       headers: { ...auth(), 'Content-Type': 'application/json' },
       body: JSON.stringify(data),
     };
 
-    const response = await fetch(`${baseURL}/users/${_id}`, requestConfig);
+    const response = await fetch(`${BASE_URL}/users/${_id}`, requestConfig);
     const { user, status } = await handleResponse(response);
     console.log('Response status:', status);
     return user;
@@ -106,7 +99,7 @@ const service = {
       headers: auth(),
     };
 
-    const response = await fetch(`${baseURL}/users/${id}`, requestConfig);
+    const response = await fetch(`${BASE_URL}/users/${id}`, requestConfig);
     const { user, status } = await handleResponse(response);
     console.log('Response status:', status);
     return user;

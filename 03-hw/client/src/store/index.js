@@ -90,13 +90,13 @@ export default new Vuex.Store({
 
       // state.all.items = state.all.items.map(user =>
       state.users = state.users.map(user =>
-        user.id === id ? { ...user, deleting: true } : user
+        user._id === id ? { ...user, deleting: true } : user
       );
     },
     deleteSuccess(state, id) {
       // remove deleted user from state
-      // state.all.items = state.all.items.filter(user => user.id !== id);
-      state.users = state.users.filter(user => user.id !== id);
+      // state.all.items = state.all.items.filter(user => user._id !== id);
+      state.users = state.users.filter(user => user._id !== id);
     },
     deleteFailure(state, { id, error }) {
       // remove 'deleting:true' property and add 'deleteError:[error]'
@@ -145,6 +145,18 @@ export default new Vuex.Store({
     },
     getAssignedLoadsFailure(state, error) {
       state.all = { error };
+    },
+    createLoad(state, load) {
+      state.loads = [...state.loads, load];
+    },
+    deleteLoadRequest(state, id) {
+      state.loads = state.loads.map(load =>
+        load._id === id ? { ...load, deleting: true } : load
+      );
+    },
+    deleteLoadSuccess(state, id) {
+      console.log(state.loads);
+      state.loads = state.loads.filter(load => load._id !== id);
     },
   },
 
@@ -219,7 +231,7 @@ export default new Vuex.Store({
 
         UserService.remove(id).then(
           user => {
-            commit('deleteSuccess', user.id);
+            commit('deleteSuccess', user._id);
 
             // logout self-deleted user
             UserService.logout();
@@ -232,17 +244,12 @@ export default new Vuex.Store({
     },
     // { id, updatedData } === payload
     updateAccountInfo({ commit }, payload) {
-      console.log(payload);
       UserService.update(payload).then(
-        user => {
-          console.log(user);
-          commit('update', user);
-        },
+        user => commit('update', user),
         error => console.log(error.toString())
       );
     },
     updatePassword({ commit }, payload) {
-      console.log(payload);
       UserService.updatePassword(payload).then(
         user => commit('updatePassword', user),
         error => console.log(error.toString())
@@ -253,9 +260,26 @@ export default new Vuex.Store({
     getLoads({ commit }) {
       commit('getAssignedLoadsRequest');
 
-      LoadService.getLoads().then(
+      LoadService.getAll().then(
         loads => commit('getAssignedLoadsSuccess', loads),
         error => commit('getAssignedLoadsFailure', error)
+      );
+    },
+    createLoad({ commit }, payload) {
+      LoadService.create(payload).then(
+        load => {
+          commit('createLoad', load);
+          router.push('/profile');
+        },
+        error => console.log(error.toString())
+      );
+    },
+    removeLoad({ commit }, id) {
+      commit('deleteLoadRequest', id);
+
+      LoadService.remove(id).then(
+        load => commit('deleteLoadSuccess', load._id),
+        error => console.log(error.toString())
       );
     },
   },
