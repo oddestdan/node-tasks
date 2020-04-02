@@ -115,6 +115,26 @@ export default new Vuex.Store({
         return user;
       });
     },
+    update(state, user) {
+      state.status = {};
+
+      // Update user information from local storage
+      const { token } = JSON.parse(localStorage.getItem('user'));
+      user.token = token;
+      localStorage.setItem('user', JSON.stringify(user));
+
+      state.user = user;
+    },
+    updatePassword(state, user) {
+      state.status = {};
+
+      // Update user information from local storage
+      const { token } = JSON.parse(localStorage.getItem('user'));
+      user.token = token;
+      localStorage.setItem('user', JSON.stringify(user));
+
+      state.user = user;
+    },
 
     // Loads management
     getAssignedLoadsRequest(state) {
@@ -189,7 +209,6 @@ export default new Vuex.Store({
         error => commit('getAllFailure', error)
       );
     },
-
     remove({ commit }, id) {
       const agreed = window.confirm(
         'Are you sure you want to delete your account?'
@@ -211,13 +230,31 @@ export default new Vuex.Store({
         );
       }
     },
+    // { id, updatedData } === payload
+    updateAccountInfo({ commit }, payload) {
+      console.log(payload);
+      UserService.update(payload).then(
+        user => {
+          console.log(user);
+          commit('update', user);
+        },
+        error => console.log(error.toString())
+      );
+    },
+    updatePassword({ commit }, payload) {
+      console.log(payload);
+      UserService.updatePassword(payload).then(
+        user => commit('updatePassword', user),
+        error => console.log(error.toString())
+      );
+    },
 
     // Loads management
-    getAssigned({ commit }) {
+    getLoads({ commit }) {
       commit('getAssignedLoadsRequest');
 
-      LoadService.getAssigned().then(
-        resp => commit('getAssignedLoadsSuccess', resp.loads),
+      LoadService.getLoads().then(
+        loads => commit('getAssignedLoadsSuccess', loads),
         error => commit('getAssignedLoadsFailure', error)
       );
     },

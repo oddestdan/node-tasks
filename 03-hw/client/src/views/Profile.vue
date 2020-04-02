@@ -28,16 +28,25 @@
 
           <div class="col-6">Phone</div>
           <div class="col-6">
-            <input v-model="user.phone" />
+            <input @change="handlePhoneChange" v-model="user.phone" />
           </div>
 
           <div class="w-100 d-none d-md-block"></div>
 
           <div class="col-6">Email</div>
           <div class="col-6">
-            <input @change="handleChange" v-model="user.email" />
+            <input @change="handleEmailChange" v-model="user.email" />
+          </div>
+
+          <div class="w-100 d-none d-md-block"></div>
+          <br />
+
+          <button @click="handlePasswordClick" class="col-6">Reset Password</button>
+          <div class="col-6">
+            <input v-model="newPassword" placeholder="Enter new password" />
           </div>
         </div>
+        <br />
       </div>
     </div>
 
@@ -102,6 +111,12 @@ import { mapState, mapActions } from 'vuex';
 export default {
   name: 'ProfilePage',
 
+  data() {
+    return {
+      newPassword: '',
+    };
+  },
+
   computed: {
     ...mapState({
       user: state => state.user,
@@ -111,15 +126,35 @@ export default {
 
   methods: {
     ...mapActions({
-      getLoads: 'getAssigned',
+      getLoads: 'getLoads',
+      updateAccountInfo: 'updateAccountInfo',
+      updatePassword: 'updatePassword',
     }),
 
-    handleChange(e) {
-      console.log('Updating value', e.target.value);
+    handlePhoneChange(e) {
+      console.log('Updating phone value', e.target.value);
+      const { _id, phone } = this.user;
+      const data = { phone };
+      this.updateAccountInfo({ _id, data });
+    },
+
+    handleEmailChange(e) {
+      console.log('Updating email value', e.target.value);
+      const { _id, email } = this.user;
+      const data = { email };
+      this.updateAccountInfo({ _id, data });
+    },
+
+    handlePasswordClick(e) {
+      const { _id } = this.user;
+      const data = { password: this.newPassword };
+      this.updatePassword({ _id, data });
+      this.newPassword = ''; // reset
     },
   },
 
   created() {
+    // TODO: check caching of loads when logged out and in
     this.getLoads();
   },
 };

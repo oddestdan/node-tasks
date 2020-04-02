@@ -67,33 +67,33 @@ const service = {
     return user;
   },
 
-  async update(userData) {
+  async update({ _id, data }) {
+    console.log('in update');
+    console.log(_id);
+    console.log(data);
     const requestConfig = {
       method: 'PUT',
       headers: { ...auth(), 'Content-Type': 'application/json' },
-      body: JSON.stringify(userData),
+      body: JSON.stringify(data),
     };
 
-    const response = await fetch(
-      `${baseURL}/users/${userData.id}`,
-      requestConfig
-    );
+    const response = await fetch(`${baseURL}/users/${_id}`, requestConfig);
     const { user, status } = await handleResponse(response);
     console.log('Response status:', status);
     return user;
   },
 
-  async updatePassword(userData) {
+  async updatePassword({ _id, data }) {
+    console.log('in updatePassword');
+    console.log(_id);
+    console.log(data);
     const requestConfig = {
       method: 'PATCH',
       headers: { ...auth(), 'Content-Type': 'application/json' },
-      body: JSON.stringify(userData),
+      body: JSON.stringify(data),
     };
 
-    const response = await fetch(
-      `${baseURL}/users/${userData.id}`,
-      requestConfig
-    );
+    const response = await fetch(`${baseURL}/users/${_id}`, requestConfig);
     const { user, status } = await handleResponse(response);
     console.log('Response status:', status);
     return user;
