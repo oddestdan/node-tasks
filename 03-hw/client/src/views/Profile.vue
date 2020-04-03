@@ -48,57 +48,11 @@
         </div>
         <br />
       </div>
-    </div>
 
-    <div class="container">
-      <div class="row">
-        <div class="col">
-          <!-- <div class="row d-flex justify-content-between"> -->
-          <div class="row">
-            <h2>{{isDriver ? 'Assigned' : 'Created'}} Loads</h2>
-            <button @click="handleCreateLoadClick" class="btn btn-link">Create New Load</button>
-          </div>
-          <section class="panel panel-success" v-if="loads.length">
-            <!-- <div class="panel-heading">List of users</div> -->
-            <table class="table table-striped">
-              <tr>
-                <th>Load ID</th>
-                <th>{{isDriver ? 'Created by' : 'Assigned to'}}</th>
-                <th>Status</th>
-                <th>State</th>
-                <th>Dimensions</th>
-                <th>Payload</th>
-                <!-- <th>Logs</th> -->
-              </tr>
-              <tr v-for="(load, i) in loads" :key="`${load._id}_${i}`">
-                <td>{{ load._id }}</td>
-                <td>
-                  {{
-                  isDriver ? load.creatorId : load.assigneeId
-                  }}
-                </td>
-                <td>{{ load.status }}</td>
-                <td>{{ load.state || '-' }}</td>
-                <td>
-                  <p class="dimensions">H: {{ load.dimensions['height'] }}</p>
-                  <p class="dimensions">W: {{ load.dimensions['width'] }}</p>
-                  <p class="dimensions">L :{{ load.dimensions['length'] }}</p>
-                </td>
-                <td>{{ load.payload }}</td>
-                <td
-                  class="actions"
-                  v-if="load.status === 'NEW'"
-                  @click="() => handleDeleteLoadClick(load._id)"
-                >x</td>
-                <!-- <td>{{ load.logs }}</td> -->
-              </tr>
-            </table>
-          </section>
-          <section class="panel panel-danger" v-else>
-            <p>No loads {{ isDriver ? 'assigned' : 'created' }} yet...</p>
-          </section>
-        </div>
-      </div>
+      <button
+        @click="$router.push('/loads')"
+        class="btn btn-link"
+      >{{isDriver ? 'Assigned' : 'Created'}} Loads</button>
     </div>
   </div>
 </template>
@@ -118,18 +72,12 @@ export default {
   computed: {
     ...mapState({
       user: state => state.user,
-      isDriver: state => state.user.role === 'shipper',
-      loads: state => state.loads,
+      isDriver: state => state.user.role === 'driver',
     }),
   },
 
   methods: {
-    ...mapActions([
-      'getLoads',
-      'updateAccountInfo',
-      'updatePassword',
-      'removeLoad',
-    ]),
+    ...mapActions(['updateAccountInfo', 'updatePassword']),
 
     handlePhoneChange(e) {
       const { _id, phone } = this.user;
@@ -149,19 +97,6 @@ export default {
       this.updatePassword({ _id, data });
       this.newPassword = ''; // reset
     },
-
-    handleCreateLoadClick(e) {
-      this.$router.push('/loads/new');
-    },
-
-    handleDeleteLoadClick(id) {
-      this.removeLoad(id);
-    },
-  },
-
-  created() {
-    // TODO: check caching of loads when logged out and in
-    this.getLoads();
   },
 };
 </script>

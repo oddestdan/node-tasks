@@ -15,7 +15,7 @@ router.get('/loads', async (req, res) => {
   })
     .then(loads => {
       if (loads.length) {
-        res.json({ status: 'Showing all loads', loads });
+        res.json({ status: `Showing loads of user ${username}`, loads });
       } else {
         res
           .status(404)
@@ -74,24 +74,28 @@ router.post('/loads', async (req, res) => {
 router.patch('/loads/:id/post', async (req, res) => {
   try {
     // Find Load by Id and update status to POSTED
-    const load = await Load.findByIdAndUpdate(req.params.id, {
-      status: statuses.load['posted']
-    });
-
+    // const load = await Load.findByIdAndUpdate(req.params.id, {
+    // status: statuses.load['posted']
+    // });
+    const load = await Load.findById(req.params.id);
     if (!load) {
-      res.status(404).json({ status: `Load ${load._id} not found` });
+      return res.status(404).json({ status: `Load ${load._id} not found` });
     }
+    load.status = statuses.load['posted'];
 
     const trucks = await Truck.find({});
     const truckCandidate = findTruckCandidate(trucks, load);
 
     if (!truckCandidate) {
-      // update status back to NEW
       load.status = statuses.load['new'];
-      load.save();
-      // await Load.findByIdAndUpdate(req.params.id, {
-      //   status: statuses.load['new']
-      // });
+      load.logs = [
+        ...load.logs,
+        {
+          message: `Unable to find fitting truck`,
+          time: new Date().toISOString()
+        }
+      ];
+      await load.save();
       return res.status(404).json({ status: 'Unable to find fitting truck' });
     }
 

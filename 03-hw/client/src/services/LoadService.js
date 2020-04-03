@@ -27,6 +27,18 @@ export default {
     return load;
   },
 
+  async post(id) {
+    const requestConfig = {
+      method: 'PATCH',
+      headers: auth(),
+    };
+
+    const response = await fetch(`${BASE_URL}/loads/${id}/post`, requestConfig);
+    const { load, truckCandidate, status } = await handleResponse(response);
+    console.log('Response status:', status);
+    return { load, truckCandidate };
+  },
+
   // "remove" because delete is a reserved word in JS
   async remove(id) {
     const requestConfig = {
