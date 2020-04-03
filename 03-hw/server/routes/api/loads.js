@@ -73,10 +73,6 @@ router.post('/loads', async (req, res) => {
 // Post a Load & Automatically assign to appropriate Truck
 router.patch('/loads/:id/post', async (req, res) => {
   try {
-    // Find Load by Id and update status to POSTED
-    // const load = await Load.findByIdAndUpdate(req.params.id, {
-    // status: statuses.load['posted']
-    // });
     const load = await Load.findById(req.params.id);
     if (!load) {
       return res.status(404).json({ status: `Load ${load._id} not found` });

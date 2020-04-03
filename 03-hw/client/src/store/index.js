@@ -163,6 +163,13 @@ export default new Vuex.Store({
 
       state.loads = [...loads];
     },
+    updateLoad(state, load) {
+      const loads = state.loads;
+      const index = loads.findIndex(x => x._id === load._id);
+      loads[index] = load;
+
+      state.loads = [...loads];
+    },
     deleteLoadRequest(state, id) {
       state.loads = state.loads.map(load =>
         load._id === id ? { ...load, deleting: true } : load
@@ -197,6 +204,13 @@ export default new Vuex.Store({
     },
     assignTruck(state, trucks) {
       state.trucks = trucks;
+    },
+    updateTruck(state, truck) {
+      const trucks = state.trucks;
+      const index = trucks.findIndex(x => x._id === truck._id);
+      trucks[index] = truck;
+
+      state.trucks = [...trucks];
     },
     deleteTruckRequest(state, id) {
       state.trucks = state.trucks.map(truck =>
@@ -290,7 +304,6 @@ export default new Vuex.Store({
         );
       }
     },
-    // { id, updatedData } === payload
     updateAccountInfo({ commit }, payload) {
       UserService.update(payload).then(
         user => commit('update', user),
@@ -328,6 +341,12 @@ export default new Vuex.Store({
       LoadService.post(id).then(
         load => commit('postLoadSuccess', load),
         error => console.log(error)
+      );
+    },
+    updateLoad({ commit }, payload) {
+      LoadService.update(payload).then(
+        load => commit('updateLoad', load),
+        error => console.log(error.toString())
       );
     },
     removeLoad({ commit }, id) {
@@ -368,6 +387,12 @@ export default new Vuex.Store({
     assignTruck({ commit }, id) {
       TruckService.assign(id).then(
         trucks => commit('assignTruck', trucks),
+        error => console.log(error.toString())
+      );
+    },
+    updateTruck({ commit }, payload) {
+      TruckService.update(payload).then(
+        truck => commit('updateTruck', truck),
         error => console.log(error.toString())
       );
     },

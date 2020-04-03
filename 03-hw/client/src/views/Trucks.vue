@@ -90,12 +90,16 @@ export default {
   },
 
   methods: {
-    // 'getCreatedTrucks' // TODO: use later ?
+    // 'getCreatedTrucks' // use later ?
     ...mapActions(['getAllTrucks', 'assignTruck', 'removeTruck']),
 
     handleCreateTruckClick(e) {
       this.$router.push('/trucks/new');
     },
+
+    // handleUpdateLoadClick(id) {
+    // TODO: implement load update later
+    // }
 
     handleAssignTruckClick(id) {
       this.assignTruck(id);

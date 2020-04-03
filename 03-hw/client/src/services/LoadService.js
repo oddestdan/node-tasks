@@ -39,6 +39,19 @@ export default {
     return { load, truckCandidate };
   },
 
+  async update({ _id, data }) {
+    const requestConfig = {
+      method: 'PUT',
+      headers: { ...auth(), 'Content-Type': 'application/json' },
+      body: JSON.stringify(data),
+    };
+
+    const response = await fetch(`${BASE_URL}/loads/${_id}`, requestConfig);
+    const { load, status } = await handleResponse(response);
+    console.log('Response status:', status);
+    return load;
+  },
+
   // "remove" because delete is a reserved word in JS
   async remove(id) {
     const requestConfig = {

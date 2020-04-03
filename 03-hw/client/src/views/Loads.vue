@@ -9,9 +9,7 @@
               v-if="!isDriver"
               @click="handleCreateLoadClick"
               class="btn btn-link"
-            >
-              Create New Load
-            </button>
+            >Create New Load</button>
           </div>
           <section class="panel panel-success" v-if="loads.length">
             <table class="table table-striped">
@@ -26,9 +24,7 @@
               </tr>
               <tr v-for="(load, i) in loads" :key="`${load._id}_${i}`">
                 <td>{{ load._id }}</td>
-                <td>
-                  {{ isDriver ? load.creatorId : load.assigneeId }}
-                </td>
+                <td>{{ isDriver ? load.creatorId : load.assigneeId }}</td>
                 <td>{{ load.status }}</td>
                 <td>{{ load.state || '-' }}</td>
                 <td class="dimensions">
@@ -62,26 +58,14 @@
                     v-b-modal.modal-xl
                     variant="link"
                     v-else
-                  >
-                    Logs
-                  </b-button>
+                  >Logs</b-button>
                 </td>
 
                 <td class="actions" v-if="load.status === 'NEW'">
-                  <button
-                    @click="() => handlePostLoadClick(load._id)"
-                    class="btn btn-link"
-                  >
-                    Post
-                  </button>
+                  <button @click="() => handlePostLoadClick(load._id)" class="btn btn-link">Post</button>
                 </td>
                 <td class="actions" v-if="load.status === 'NEW'">
-                  <button
-                    @click="() => handleDeleteLoadClick(load._id)"
-                    class="btn btn-link"
-                  >
-                    x
-                  </button>
+                  <button @click="() => handleDeleteLoadClick(load._id)" class="btn btn-link">x</button>
                 </td>
               </tr>
             </table>
@@ -92,7 +76,7 @@
         </div>
       </div>
 
-      <b-modal id="modal-xl" size="xl" title="Extra Large Modal">
+      <b-modal id="modal-xl" size="xl" title="Logs">
         <table class="table table-striped">
           <tr>
             <th>Message</th>
@@ -103,6 +87,10 @@
             <td>{{ formatTime(log.time) }}</td>
           </tr>
         </table>
+
+        <template v-slot:modal-footer="{ close }">
+          <b-button variant="dark" @click="close()">Close</b-button>
+        </template>
       </b-modal>
     </div>
   </div>
@@ -136,10 +124,9 @@ export default {
       this.$router.push('/loads/new');
     },
 
-    handleShowLogsClick(logs) {
-      console.log(logs);
-      // trigger modal here
-    },
+    // handleUpdateLoadClick(id) {
+    // TODO: implement load update later
+    // }
 
     handlePostLoadClick(id) {
       this.postLoad(id);
