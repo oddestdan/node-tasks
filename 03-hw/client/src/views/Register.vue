@@ -11,9 +11,7 @@
           class="form-control"
           :class="{ 'is-invalid': submitted && !user.username }"
         />
-        <div v-show="submitted && !user.username" class="invalid-feedback">
-          Username is required
-        </div>
+        <div v-show="submitted && !user.username" class="invalid-feedback">Username is required</div>
       </div>
       <div class="form-group">
         <label for="password">Password</label>
@@ -24,10 +22,9 @@
           class="form-control"
           :class="{ 'is-invalid': submitted && !user.password }"
         />
-        <div v-show="submitted && !user.password" class="invalid-feedback">
-          Password is required
-        </div>
+        <div v-show="submitted && !user.password" class="invalid-feedback">Password is required</div>
       </div>
+
       <div class="form-group">
         <div class="form-check">
           <input
@@ -37,11 +34,10 @@
             id="shipperRadio"
             value="shipper"
             v-model="user.role"
+            :class="{ 'is-invalid': submitted && !user.role }"
             checked
           />
-          <label class="form-check-label" for="shipperRadio">
-            Shipper
-          </label>
+          <label class="form-check-label" for="shipperRadio">Shipper</label>
         </div>
         <div class="form-check">
           <input
@@ -51,16 +47,14 @@
             id="driverRadio"
             value="driver"
             v-model="user.role"
+            :class="{ 'is-invalid': submitted && !user.role }"
           />
-          <label class="form-check-label" for="driverRadio">
-            Driver
-          </label>
+          <label class="form-check-label" for="driverRadio">Driver</label>
+          <div v-show="submitted && !user.role" class="invalid-feedback">Role is required</div>
         </div>
       </div>
       <div class="form-group">
-        <button class="btn btn-dark" :disabled="status.registering">
-          Sign up
-        </button>
+        <button class="btn btn-dark" :disabled="status.registering">Sign up</button>
         <!-- <img v-show="status.registering" /> -->
         <router-link to="/login" class="btn btn-link">Log in</router-link>
       </div>
@@ -98,7 +92,8 @@ export default {
 
     async handleSubmit(e) {
       this.submitted = true;
-      if (this.user.username && this.user.password) {
+      const { username, password, role } = this.user;
+      if (username && password && role) {
         await this.register(this.user);
       }
     },

@@ -3,12 +3,12 @@
     <div class="container">
       <h2>Create New Load</h2>
       <form @submit.prevent="handleSubmit">
-        <!-- <h4>Dimensions:</h4> -->
         <div class="form-group">
           <label for="dimensions-height">*Height</label>
           <input
             class="form-control"
             type="number"
+            placeholder="Enter height"
             v-model="load.dimensions['height']"
             name="dimensions-height"
             :class="{ 'is-invalid': submitted && !load.dimensions['height'] }"
@@ -23,6 +23,7 @@
           <input
             class="form-control"
             type="number"
+            placeholder="Enter width"
             v-model="load.dimensions['width']"
             name="dimensions-width"
             :class="{ 'is-invalid': submitted && !load.dimensions['width'] }"
@@ -37,6 +38,7 @@
           <input
             class="form-control"
             type="number"
+            placeholder="Enter length"
             v-model="load.dimensions['length']"
             name="dimensions-length"
             :class="{ 'is-invalid': submitted && !load.dimensions['length'] }"
@@ -51,6 +53,7 @@
           <input
             class="form-control"
             type="number"
+            placeholder="Enter payload"
             v-model="load.payload"
             name="payload"
             :class="{ 'is-invalid': submitted && !load.payload }"
@@ -58,7 +61,6 @@
           <div v-show="submitted && !load.payload" class="invalid-feedback">Payload is required</div>
         </div>
         <div class="form-group">
-          <!-- <button class="btn btn-dark" :disabled="status.loggingIn">Login</button> -->
           <button class="btn btn-dark">Create Load</button>
         </div>
       </form>
@@ -76,11 +78,11 @@ export default {
     return {
       load: {
         dimensions: {
-          width: 100, // null
-          height: 100, // null
-          length: 100, // null
+          width: null,
+          height: null,
+          length: null,
         },
-        payload: 1000, // null
+        payload: null,
       },
       submitted: false,
     };
@@ -107,7 +109,10 @@ export default {
     handleSubmit(e) {
       this.submitted = true;
       const load = this.parseLoadInput(this.load);
-      this.createLoad(load);
+      const { width, height, length } = load;
+      if (width && height && length && load.payload) {
+        this.createLoad(load);
+      }
     },
   },
 };

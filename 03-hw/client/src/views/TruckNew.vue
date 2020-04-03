@@ -5,16 +5,21 @@
       <form @submit.prevent="handleSubmit">
         <div class="form-group">
           <label for="type">*Type</label>
-          <select class="custom-select" name="type" v-model="truck.type">
+          <select
+            class="custom-select"
+            name="type"
+            v-model="truck.type"
+            :class="{ 'is-invalid': submitted && !truck.type }"
+          >
             <option
               v-for="type in Object.keys(types)"
               :key="`${type}`"
               :value="type"
             >{{ type }}: {{ typesInfo[types[type]] }}</option>
           </select>
+          <div v-show="submitted && !truck.type" class="invalid-feedback">Type is required</div>
         </div>
         <div class="form-group">
-          <!-- <button class="btn btn-dark" :disabled="status.loggingIn">Login</button> -->
           <button class="btn btn-dark">Create Truck</button>
         </div>
       </form>
@@ -32,15 +37,14 @@ export default {
   data() {
     return {
       truck: {
-        type: 'sprinter',
+        type: '',
       },
+      submitted: false,
     };
   },
 
   computed: {
     ...mapState(['status']),
-    // typeKeys: () => Object.keys(truckTypes),
-    // typeValues: () => Object.values(truckTypes)
     types: () => truckTypes,
     typesInfo: () => truckTypeInfo,
     getTypeInfo: id => truckTypeInfo[id],
@@ -56,15 +60,12 @@ export default {
     },
 
     handleSubmit(e) {
+      this.submitted = true;
       const truck = this.parseTruckInput(this.truck);
-      console.log(truck);
-      this.createTruck(truck);
+      if (truck.type) {
+        this.createTruck(truck);
+      }
     },
-  },
-
-  created() {
-    console.log(this.types);
-    console.log(this.typesInfo);
   },
 };
 </script>
