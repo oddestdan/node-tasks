@@ -52,7 +52,9 @@ router.put('/users/:id', async (req, res) => {
       return res.status(422).json({ status: validation.error.message });
     }
 
-    const user = await User.findByIdAndUpdate(req.params.id, req.body);
+    const user = await User.findByIdAndUpdate(req.params.id, req.body, {
+      new: true
+    });
 
     return res.json({ status: `Updated user ${user.username}`, user });
   } catch (error) {
@@ -71,6 +73,7 @@ router.patch('/users/:id', async (req, res) => {
   try {
     let { password } = req.body;
 
+    console.log('PASSWORD', password);
     const validation = User.joiValidate({ password });
     if (validation.error) {
       return res.status(422).json({ status: validation.error.message });
@@ -79,7 +82,11 @@ router.patch('/users/:id', async (req, res) => {
     const salt = await bcrypt.genSalt(saltFactor);
     password = await bcrypt.hash(password, salt);
 
-    const user = await User.findByIdAndUpdate(req.params.id, { password });
+    const user = await User.findByIdAndUpdate(
+      req.params.id,
+      { password },
+      { new: true }
+    );
     return res.json({ status: `User ${user.username} password updated`, user });
   } catch (error) {
     return res.status(500).json({ status: error.message });

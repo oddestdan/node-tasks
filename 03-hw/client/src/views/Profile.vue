@@ -21,77 +21,38 @@
 
           <div class="w-100 d-none d-md-block"></div>
 
-          <div class="col-6">Role (select)</div>
+          <div class="col-6">Role</div>
           <div class="col-6">{{user.role}}</div>
 
           <div class="w-100 d-none d-md-block"></div>
 
           <div class="col-6">Phone</div>
           <div class="col-6">
-            <input v-model="user.phone" />
+            <input @change="handlePhoneChange" v-model="user.phone" />
           </div>
 
           <div class="w-100 d-none d-md-block"></div>
 
           <div class="col-6">Email</div>
           <div class="col-6">
-            <input @change="handleChange" v-model="user.email" />
+            <input @change="handleEmailChange" v-model="user.email" />
+          </div>
+
+          <div class="w-100 d-none d-md-block"></div>
+          <br />
+
+          <button @click="handlePasswordClick" class="col-6 btn btn-dark">Reset Password</button>
+          <div class="col-6">
+            <input v-model="newPassword" placeholder="Enter new password" />
           </div>
         </div>
+        <br />
       </div>
-    </div>
 
-    <div class="container">
-      <div class="row">
-        <div class="col">
-          <h2>
-            {{
-            user.role === 'driver' ? 'Assigned' : 'Created'
-            }} Loads
-          </h2>
-          <section class="panel panel-success" v-if="loads.length">
-            <!-- <div class="panel-heading">List of users</div> -->
-            <table class="table table-striped">
-              <tr>
-                <th>Load ID</th>
-                <th>
-                  {{
-                  user.role === 'driver' ? 'Created by' : 'Assigned to'
-                  }}
-                </th>
-                <th>Status</th>
-                <th>State</th>
-                <th>Dimensions</th>
-                <th>Payload</th>
-                <!-- <th>Logs</th> -->
-              </tr>
-              <tr v-for="(load, i) in loads" :key="`${load._id}_${i}`">
-                <td>{{ load._id }}</td>
-                <td>
-                  {{
-                  user.role === 'driver' ? load.creatorId : load.assigneeId
-                  }}
-                </td>
-                <td>{{ load.status }}</td>
-                <td>{{ load.state || '-' }}</td>
-                <td>
-                  <p class="dimensions">H: {{ load.dimensions['height'] }}</p>
-                  <p class="dimensions">W: {{ load.dimensions['width'] }}</p>
-                  <p class="dimensions">L :{{ load.dimensions['length'] }}</p>
-                </td>
-                <td>{{ load.payload }}</td>
-                <!-- <td>{{ load.logs }}</td> -->
-              </tr>
-            </table>
-          </section>
-          <section class="panel panel-danger" v-else>
-            <p>
-              No loads {{ user.role === 'driver' ?
-              'assigned' : 'created' }} yet...
-            </p>
-          </section>
-        </div>
-      </div>
+      <button
+        @click="$router.push('/loads')"
+        class="btn btn-link"
+      >{{isDriver ? 'Assigned' : 'Created'}} Loads</button>
     </div>
   </div>
 </template>
@@ -102,25 +63,40 @@ import { mapState, mapActions } from 'vuex';
 export default {
   name: 'ProfilePage',
 
+  data() {
+    return {
+      newPassword: '',
+    };
+  },
+
   computed: {
     ...mapState({
       user: state => state.user,
-      loads: state => state.loads,
+      isDriver: state => state.user.role === 'driver',
     }),
   },
 
   methods: {
-    ...mapActions({
-      getLoads: 'getAssigned',
-    }),
+    ...mapActions(['updateAccountInfo', 'updatePassword']),
 
-    handleChange(e) {
-      console.log('Updating value', e.target.value);
+    handlePhoneChange(e) {
+      const { _id, phone } = this.user;
+      const data = { phone };
+      this.updateAccountInfo({ _id, data });
     },
-  },
 
-  created() {
-    this.getLoads();
+    handleEmailChange(e) {
+      const { _id, email } = this.user;
+      const data = { email };
+      this.updateAccountInfo({ _id, data });
+    },
+
+    handlePasswordClick(e) {
+      const { _id } = this.user;
+      const data = { password: this.newPassword };
+      this.updatePassword({ _id, data });
+      this.newPassword = ''; // reset
+    },
   },
 };
 </script>

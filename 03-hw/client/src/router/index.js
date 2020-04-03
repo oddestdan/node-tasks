@@ -30,6 +30,26 @@ const routes = [
     name: 'Profile',
     component: () => import('../views/Profile.vue'),
   },
+  {
+    path: '/loads',
+    name: 'Loads',
+    component: () => import('../views/Loads.vue'),
+  },
+  {
+    path: '/loads/new',
+    name: 'LoadNew',
+    component: () => import('../views/LoadNew.vue'),
+  },
+  {
+    path: '/trucks',
+    name: 'Trucks',
+    component: () => import('../views/Trucks.vue'),
+  },
+  {
+    path: '/trucks/new',
+    name: 'TruckNew',
+    component: () => import('../views/TruckNew.vue'),
+  },
 ];
 
 const router = new VueRouter({
