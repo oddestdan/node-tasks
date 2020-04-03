@@ -53,13 +53,18 @@
                 <td>{{ load.payload }}</td>
                 <td class="actions">
                   <span v-if="load.logs.length === 0">-</span>
-                  <button
-                    @click="() => handleShowLogsClick(load.logs)"
-                    class="btn btn-link"
+                  <!-- @click="() => handleShowLogsClick(load.logs)" -->
+
+                  <!-- modal-tall -->
+                  <!-- modal-scrollable -->
+                  <b-button
+                    @click="modalLogs = load.logs"
+                    v-b-modal.modal-xl
+                    variant="link"
                     v-else
                   >
                     Logs
-                  </button>
+                  </b-button>
                 </td>
 
                 <td class="actions" v-if="load.status === 'NEW'">
@@ -86,15 +91,35 @@
           </section>
         </div>
       </div>
+
+      <b-modal id="modal-xl" size="xl" title="Extra Large Modal">
+        <table class="table table-striped">
+          <tr>
+            <th>Message</th>
+            <th>Timestamp</th>
+          </tr>
+          <tr v-for="log in modalLogs" :key="log.time">
+            <td>{{ log.message }}</td>
+            <td>{{ formatTime(log.time) }}</td>
+          </tr>
+        </table>
+      </b-modal>
     </div>
   </div>
 </template>
 
 <script>
 import { mapState, mapActions } from 'vuex';
+import { formatIsoStringToDate } from '../helpers';
 
 export default {
   name: 'LoadsPage',
+
+  data() {
+    return {
+      modalLogs: [],
+    };
+  },
 
   computed: {
     ...mapState({
@@ -122,6 +147,10 @@ export default {
 
     handleDeleteLoadClick(id) {
       this.removeLoad(id);
+    },
+
+    formatTime(time) {
+      return formatIsoStringToDate(time);
     },
   },
 
