@@ -8,10 +8,10 @@ export default {
       headers: auth(),
     };
 
-    const response = await fetch(`${BASE_URL}/loads`, requestConfig);
-    const { loads, status } = await handleResponse(response);
+    const response = await fetch(`${BASE_URL}/trucks`, requestConfig);
+    const { trucks, status } = await handleResponse(response);
     console.log('Response status:', status);
-    return loads;
+    return trucks;
   },
 
   async create(data) {
@@ -21,22 +21,25 @@ export default {
       body: JSON.stringify(data),
     };
 
-    const response = await fetch(`${BASE_URL}/loads`, requestConfig);
-    const { load, status } = await handleResponse(response);
+    const response = await fetch(`${BASE_URL}/trucks`, requestConfig);
+    const { truck, status } = await handleResponse(response);
     console.log('Response status:', status);
-    return load;
+    return truck;
   },
 
-  async post(id) {
+  async assign(id) {
     const requestConfig = {
       method: 'PATCH',
       headers: auth(),
     };
 
-    const response = await fetch(`${BASE_URL}/loads/${id}/post`, requestConfig);
-    const { load, truckCandidate, status } = await handleResponse(response);
+    const response = await fetch(
+      `${BASE_URL}/trucks/${id}/assign`,
+      requestConfig
+    );
+    const { trucks, status } = await handleResponse(response);
     console.log('Response status:', status);
-    return { load, truckCandidate };
+    return trucks;
   },
 
   async update({ _id, data }) {
@@ -46,10 +49,10 @@ export default {
       body: JSON.stringify(data),
     };
 
-    const response = await fetch(`${BASE_URL}/loads/${_id}`, requestConfig);
-    const { load, status } = await handleResponse(response);
+    const response = await fetch(`${BASE_URL}/trucks/${_id}`, requestConfig);
+    const { truck, status } = await handleResponse(response);
     console.log('Response status:', status);
-    return load;
+    return truck;
   },
 
   // "remove" because delete is a reserved word in JS
@@ -59,9 +62,9 @@ export default {
       headers: auth(),
     };
 
-    const response = await fetch(`${BASE_URL}/loads/${id}`, requestConfig);
-    const { load, status } = await handleResponse(response);
+    const response = await fetch(`${BASE_URL}/trucks/${id}`, requestConfig);
+    const { truck, status } = await handleResponse(response);
     console.log('Response status:', status);
-    return load;
+    return truck;
   },
 };

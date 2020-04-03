@@ -10,7 +10,6 @@
               <tr>
                 <th>ID</th>
                 <th>Username</th>
-                <th>Password</th>
                 <th>Role</th>
                 <th>Phone</th>
                 <th>Email</th>
@@ -20,15 +19,16 @@
                 {{ user.username }}</router-link>-->
                 <td>{{ user._id }}</td>
                 <td>{{ user.username }}</td>
-                <td>{{ user.password }}</td>
                 <td>{{ user.role }}</td>
                 <td>{{ user.phone || '-' }}</td>
                 <td>{{ user.email || '-' }}</td>
                 <td
                   class="actions"
-                  v-if="user.role === 'shipper'"
+                  v-if="user._id === currUser._id"
                   @click="() => handleClickDelete(user._id)"
-                >x</td>
+                >
+                  x
+                </td>
               </tr>
             </table>
           </section>
@@ -51,6 +51,7 @@ export default {
     ...mapState({
       account: state => state.account,
       users: state => state.users,
+      currUser: state => state.user,
     }),
   },
 

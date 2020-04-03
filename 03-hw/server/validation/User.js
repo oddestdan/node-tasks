@@ -2,10 +2,10 @@ const Joi = require('@hapi/joi');
 
 const passwRegex = /^(?=\S*[a-z])(?=\S*[A-Z])(?=\S*\d)(?=\S*[^\w\s])\S{8,30}$/;
 const phoneRegex = /^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-\s\./0-9]*$/;
+const simpleEmailRegex = /\S+@\S+\.\S+/;
 
 module.exports = Joi.object().keys({
   username: Joi.string()
-    // .required()
     .alphanum()
     .min(3)
     .max(30)
@@ -24,11 +24,10 @@ module.exports = Joi.object().keys({
     // })
     .label('Password'),
   role: Joi.string()
-    // .required()
     .valid('shipper', 'driver', 'admin')
     .label('Role'),
   email: Joi.string()
-    // .required()
+    .regex(simpleEmailRegex)
     .label('Email'),
   phone: Joi.string()
     .regex(phoneRegex)

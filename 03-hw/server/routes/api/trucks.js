@@ -9,7 +9,7 @@ const { checkUserIsOnLoad } = require('./helpers');
 router.get('/trucks', (req, res) => {
   Truck.find()
     .then(trucks => {
-      res.json({ status: 'ok', trucks });
+      res.json({ status: 'Showing all trucks', trucks });
     })
     .catch(e => {
       res.status(500).json({ status: e.message });
@@ -18,12 +18,12 @@ router.get('/trucks', (req, res) => {
 
 // Get Created Trucks
 router.get('/trucks/created', async (req, res) => {
-  const { _id } = await User.findOne({ _id: req.user.userId });
+  const { username, _id } = await User.findOne({ _id: req.user.userId });
 
   Truck.find({ creatorId: _id })
     .then(trucks => {
       if (trucks.length) {
-        res.json({ status: 'ok', trucks });
+        res.json({ status: `Showing trucks created by ${username}`, trucks });
       } else {
         res.status(400).json({ status: 'No trucks found' });
       }
@@ -36,7 +36,9 @@ router.get('/trucks/created', async (req, res) => {
 // Get Truck
 router.get('/trucks/:id', (req, res) => {
   Truck.findById(req.params.id)
-    .then(truck => res.json({ status: 'ok', truck }))
+    .then(truck =>
+      res.json({ status: `Showing truck by id ${req.params.id}`, truck })
+    )
     .catch(e => {
       res.status(500).json({ status: e.message });
     });
@@ -85,7 +87,7 @@ router.post('/trucks', async (req, res) => {
 
 // Assign Truck to Self
 router.patch('/trucks/:id/assign', async (req, res) => {
-  const { _id } = await User.findOne({ _id: req.user.userId });
+  const { username, _id } = await User.findOne({ _id: req.user.userId });
   const truckId = req.params.id;
 
   if (await checkUserIsOnLoad(_id)) {
@@ -102,12 +104,20 @@ router.patch('/trucks/:id/assign', async (req, res) => {
   }
 
   try {
-    const truck = await Truck.findByIdAndUpdate(truckId, { assigneeId: _id });
+    const truck = await Truck.findByIdAndUpdate(
+      truckId,
+      { assigneeId: _id },
+      { new: true }
+    );
     if (!truck) {
-      return res.status(404).json({ status: `Truck ${truckId} not found` });
+      return res.status(404).json({ status: `Truck $${truckId} not found` });
     }
 
-    return res.json({ status: 'ok', truck });
+    const updatedTrucks = await Truck.find({});
+    return res.json({
+      status: `Truck ${truckId} self-assigned by ${username}`,
+      trucks: updatedTrucks
+    });
   } catch (error) {
     return res.status(500).json({ status: error.message });
   }
@@ -134,8 +144,8 @@ router.put('/trucks/:id', async (req, res) => {
     return res.status(422).json({ status: validation.error.message });
   }
 
-  Truck.findByIdAndUpdate(req.params.id, req.body)
-    .then(truck => res.json({ status: 'ok', truck }))
+  Truck.findByIdAndUpdate(req.params.id, req.body, { new: true })
+    .then(truck => res.json({ status: `Updated truck ${truck._id}`, truck }))
     .catch(e => {
       return res.status(500).json({ status: e.message });
     });
@@ -157,7 +167,7 @@ router.delete('/trucks/:id', async (req, res) => {
   }
 
   Truck.findByIdAndDelete(req.params.id)
-    .then(truck => res.json({ status: 'ok' }))
+    .then(truck => res.json({ status: `Deleted truck ${truck._id}`, truck }))
     .catch(e => {
       res.status(500).json({ status: e.message });
     });
