@@ -4,7 +4,11 @@ const router = express.Router();
 const { User, Load, Truck } = require('../../models');
 const { statuses, loadStates } = require('../../globals');
 
-const { findTruckCandidate, handleLoadsPagination } = require('./helpers');
+const {
+  findTruckCandidate,
+  handleLoadsStatusFiltering,
+  handleLoadsPagination
+} = require('./helpers');
 const { parseUrlParams } = require('../../utils');
 
 // Get Created Loads or Get Assigned Loads
@@ -24,8 +28,9 @@ router.get('/loads', async (req, res) => {
         .json({ status: `No loads found for user: ${username}` });
     }
 
-    // Handling pagination
     const _metadata = { page: 1, rpp: 5, totalCount: loads.length };
+
+    loads = handleLoadsStatusFiltering(loads, _metadata, params);
     loads = handleLoadsPagination(loads, _metadata, params);
 
     res.json({ status: `Showing loads of user ${username}`, _metadata, loads });
