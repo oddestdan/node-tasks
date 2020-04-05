@@ -38,6 +38,18 @@ Alternatives to the last command:
 `npm run watch` for **nodemon service**
 `npm run dev` for "pretty" pino **request logging**, or run the following command directly: `LOG_LEVEL=debug node index.js | ./node_modules/.bin/pino-pretty`
 
+### Database (MongoDB)
+
+Project uses [MongoDB Atlas cloud service](https://www.mongodb.com/cloud/atlas). In order to connect to the database, it is required to provide username, password, cluster and database titles to project's config.
+
+If you prefer to use **local MongoDB**, please proceed to **override** the `dbURI string` with your own connection string (located in `/server/index.js`).
+
+### Weather (OpenWeatherMap)
+
+Project uses a free-to-use [OpenWeather API](https://openweathermap.org/api). In order to successfully fetch to the API, it is required to provide your own **OpenWeatherAPI key** (located on the site, in Profile -> API keys) to the project's config.
+
+_Note_: upon the initial sign up to the OpenWeather API, it might take **several hours** for the key to activate.
+
 ## Project development
 
 [Scrum Board](https://trello.com/b/5WFzOL8H/uber)
