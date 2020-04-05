@@ -6,6 +6,7 @@ import router from '../router/';
 import UserService from '../services/UserService';
 import LoadService from '../services/LoadService';
 import TruckService from '../services/TruckService';
+import WeatherService from '../services/WeatherService';
 
 Vue.use(Vuex);
 
@@ -30,6 +31,9 @@ export default new Vuex.Store({
 
     // Trucks management
     trucks: [],
+
+    // Weather information
+    weather: null,
   },
 
   mutations: {
@@ -220,6 +224,11 @@ export default new Vuex.Store({
     deleteTruckSuccess(state, id) {
       state.trucks = state.trucks.filter(truck => truck._id !== id);
     },
+
+    // Weather information
+    getWeather(state, weather) {
+      state.weather = weather;
+    }
   },
 
   actions: {
@@ -401,6 +410,15 @@ export default new Vuex.Store({
 
       TruckService.remove(id).then(
         truck => commit('deleteTruckSuccess', truck._id),
+        error => console.log(error.toString())
+      );
+    },
+
+    // Weather information fetching
+    getWeather({ commit }, data) {
+      // commit('getWeather');
+      WeatherService.getInfo(data).then(
+        weatherData => commit('getWeather', weatherData),
         error => console.log(error.toString())
       );
     },
