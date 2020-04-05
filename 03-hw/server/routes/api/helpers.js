@@ -32,3 +32,22 @@ module.exports.findTruckCandidate = (trucks, load) => {
 
   return truckCandidate;
 };
+
+module.exports.handleLoadsPagination = (loads, _metadata, params) => {
+  let paginatedLoads = [...loads];
+
+  if (params) {
+    const { page, rpp } = params;
+    if (page && rpp) {
+      _metadata.page = +page;
+      _metadata.rpp = +rpp;
+    }
+  }
+
+  paginatedLoads = loads.filter((_, i) => {
+    const offset = (_metadata.page - 1) * _metadata.rpp;
+    return offset <= i && i < offset + _metadata.rpp;
+  });
+
+  return paginatedLoads;
+};
