@@ -33,7 +33,7 @@
                   >Assign</button>
                 </td>
                 <td class="actions">
-                  <button @click="() => handleDeleteTruckClick(load._id)" class="btn btn-link">x</button>
+                  <button @click="() => handleDeleteTruckClick(truck._id)" class="btn btn-link">x</button>
                 </td>
               </tr>
             </table>

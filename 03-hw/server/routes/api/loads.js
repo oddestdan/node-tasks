@@ -158,7 +158,7 @@ router.put('/loads/:id', async (req, res) => {
   }
 });
 
-// Update Load status (for driver)
+// Update Load state (for driver)
 router.patch('/loads/:id/state', async (req, res) => {
   const user = await User.findOne({ _id: req.user.userId });
 
@@ -195,7 +195,8 @@ router.patch('/loads/:id/state', async (req, res) => {
     await load.save();
 
     res.json({
-      status: `Load state updated: ${state}. Load status: ${load.status}`
+      status: `Load state updated: ${state}. Load status: ${load.status}`,
+      load
     });
   } catch (error) {
     res.status(500).json({ status: error.message });

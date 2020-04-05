@@ -26,7 +26,21 @@
                 <td>{{ load._id }}</td>
                 <td>{{ isDriver ? load.creatorId : load.assigneeId }}</td>
                 <td>{{ load.status }}</td>
-                <td>{{ load.state || '-' }}</td>
+                <select
+                  v-if="isDriver"
+                  class="custom-select"
+                  name="state"
+                  v-model="load.state"
+                  @change="() => handleStateChange(load)"
+                >
+                  <option
+                    v-for="state in Object.values(loadStates)"
+                    :key="`${state}`"
+                    :value="state"
+                    >{{ state }}</option
+                  >
+                </select>
+                <td v-else>{{ load.state }}</td>
                 <td class="dimensions">
                   {{ load.dimensions['width'] }} x
                   {{ load.dimensions['height'] }} x
@@ -99,6 +113,7 @@
 <script>
 import { mapState, mapActions } from 'vuex';
 import { formatIsoStringToDate } from '../helpers';
+import { loadStates } from '../globals';
 
 export default {
   name: 'LoadsPage',
@@ -114,19 +129,22 @@ export default {
       user: state => state.user,
       isDriver: state => state.user.role === 'driver',
       loads: state => state.loads,
+      loadStates: () => loadStates,
     }),
   },
 
   methods: {
-    ...mapActions(['getLoads', 'postLoad', 'removeLoad']),
+    ...mapActions(['getLoads', 'updateLoadState', 'postLoad', 'removeLoad']),
 
     handleCreateLoadClick(e) {
       this.$router.push('/loads/new');
     },
 
-    // handleUpdateLoadClick(id) {
-    // TODO: implement load update later
-    // }
+    handleStateChange(load) {
+      const { _id, state } = load;
+      const data = { state };
+      this.updateLoadState({ _id, data });
+    },
 
     handlePostLoadClick(id) {
       this.postLoad(id);

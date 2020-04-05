@@ -358,6 +358,12 @@ export default new Vuex.Store({
         error => console.log(error.toString())
       );
     },
+    updateLoadState({ commit }, payload) {
+      LoadService.updateState(payload).then(
+        load => commit('updateLoad', load),
+        error => console.log(error.toString())
+      );
+    },
     removeLoad({ commit }, id) {
       commit('deleteLoadRequest', id);
 
