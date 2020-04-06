@@ -2,9 +2,9 @@
   <div class="truck-new">
     <div class="container">
       <h2>Create New Truck</h2>
-      <form @submit.prevent="handleSubmit">
-        <div class="form-group">
-          <label for="type">*Type</label>
+      <form class="truck-new__form" @submit.prevent="handleSubmit">
+        <div class="form-group truck-new__form-group">
+          <label for="type">*Type: W x H x L / Payload</label>
           <select
             class="custom-select"
             name="type"
@@ -15,11 +15,14 @@
               v-for="type in Object.keys(types)"
               :key="`${type}`"
               :value="type"
-            >{{ type }}: {{ typesInfo[types[type]] }}</option>
+              >{{ type }}: {{ formatTypeInfo(type) }}</option
+            >
           </select>
-          <div v-show="submitted && !truck.type" class="invalid-feedback">Type is required</div>
+          <div v-show="submitted && !truck.type" class="invalid-feedback">
+            Type is required
+          </div>
         </div>
-        <div class="form-group">
+        <div class="form-group truck-new__form-group--button">
           <button class="btn btn-dark">Create Truck</button>
         </div>
       </form>
@@ -66,9 +69,37 @@ export default {
         this.createTruck(truck);
       }
     },
+
+    formatTypeInfo(type) {
+      const typeValue = this.types[type];
+      const info = this.typesInfo[typeValue];
+      const { height, width, length } = info.dimensions;
+      return `${height} x ${width} x ${length} / ${typeInfo.payload}`;
+    },
   },
 };
 </script>
 
 <style lang="scss" scoped>
+@import '../media_mixins.scss';
+
+.truck-new {
+  &__form {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+  }
+
+  &__form-group {
+    width: 45%;
+
+    &--button {
+      width: 100%;
+    }
+
+    @include phone {
+      width: 100%;
+    }
+  }
+}
 </style>

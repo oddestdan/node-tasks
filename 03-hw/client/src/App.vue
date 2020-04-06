@@ -18,6 +18,8 @@ export default {
 </script>
 
 <style lang="scss">
+@import './media_mixins.scss';
+
 body {
   padding: 0;
   margin: 0;
@@ -29,5 +31,15 @@ body {
   -moz-osx-font-smoothing: grayscale;
 
   padding: 0 42px;
+
+  @include phone {
+    padding: 0;
+  }
+
+  // Override bootstrap's vertical align for cells
+  .table th,
+  .table td {
+    vertical-align: middle !important;
+  }
 }
 </style>

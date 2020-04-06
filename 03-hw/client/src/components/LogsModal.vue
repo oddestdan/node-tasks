@@ -47,4 +47,18 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss">
+@import '../media_mixins.scss';
+
+.modal-backdrop {
+  @include phone {
+    width: 100%;
+  }
+}
+
+.modal-dialog {
+  @include phone {
+    width: calc(100vw - 1rem);
+  }
+}
+</style>

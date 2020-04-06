@@ -74,15 +74,24 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import '../media_mixins.scss';
+
 .header {
   padding: 5px 0;
   display: flex;
   justify-content: space-between;
   align-items: center;
 
+  @include phone {
+    flex-direction: column;
+    padding-bottom: 20px;
+  }
+
   &__menu {
     display: flex;
     align-items: center;
+    @include phone {
+    }
   }
 
   &__link {
@@ -91,18 +100,8 @@ export default {
 
   &__separator {
     padding: 0 10px;
-  }
-}
 
-@media only screen and (max-width: 600px) {
-  .header {
-    flex-direction: column;
-
-    &__menu {
-      flex-direction: column;
-    }
-
-    &__separator {
+    @include phone {
       display: none;
     }
   }
