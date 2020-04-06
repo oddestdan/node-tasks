@@ -90,17 +90,11 @@ export default {
   },
 
   methods: {
-    // 'getCreatedTrucks' // use later ?
     ...mapActions(['getAllTrucks', 'assignTruck', 'removeTruck']),
 
     handleCreateTruckClick(e) {
       this.$router.push('/trucks/new');
     },
-
-    // handleUpdateLoadClick(id) {
-    // TODO: implement load update later
-    // }
-
     handleAssignTruckClick(id) {
       this.assignTruck(id);
     },
@@ -111,7 +105,6 @@ export default {
   },
 
   created() {
-    // TODO: check caching of trucks when logged out and in
     this.getAllTrucks();
   },
 };

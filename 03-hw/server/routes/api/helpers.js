@@ -52,7 +52,6 @@ module.exports.handleLoadsPagination = (loads, _metadata, params) => {
   return paginatedLoads;
 };
 
-// statuses: [ new | posted | assigned | shipper ]
 module.exports.handleLoadsStatusFiltering = (loads, _metadata, params) => {
   let filteredLoads = [...loads];
 

@@ -52,14 +52,6 @@ router.get('/loads/:id', (req, res) => {
 
 // Create Load
 router.post('/loads', async (req, res) => {
-  // creatorId: Assigned by current User-Shipper
-  // assigneeId: default ''
-  // logs: default []
-  // status: default 'NEW'
-  // state: default ''
-  // dimensions: Specified at UI (Object)
-  // payload: Specified at UI (Number)
-
   const { dimensions, payload } = req.body;
   const { role, _id } = await User.findOne({ _id: req.user.userId });
 

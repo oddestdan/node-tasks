@@ -7,8 +7,8 @@
     <div class="header__menu">
       <router-link class="header__link" to="/">Home</router-link>
       <span class="header__separator">|</span>
-      <router-link class="header__link" to="/users">Users</router-link>
-      <span class="header__separator">|</span>
+      <!-- <router-link class="header__link" to="/users">Users</router-link> -->
+      <!-- <span class="header__separator">|</span> -->
       <router-link class="header__link" to="/profile">Profile</router-link>
       <span class="header__separator">|</span>
 
