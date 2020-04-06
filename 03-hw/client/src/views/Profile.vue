@@ -4,25 +4,13 @@
       <h1>Profile</h1>
       <div class="col">
         <div class="row">
-          <div class="w-100 d-none d-md-block"></div>
-
-          <div class="col-6">ID</div>
-          <div class="col-6">{{user._id}}</div>
-
-          <div class="w-100 d-none d-md-block"></div>
-
           <div class="col-6">Username</div>
-          <div class="col-6">{{user.username}}</div>
-
-          <div class="w-100 d-none d-md-block"></div>
-
-          <div class="col-6">Password</div>
-          <div class="col-6">{{user.password}}</div>
+          <div class="col-6">{{ user.username }}</div>
 
           <div class="w-100 d-none d-md-block"></div>
 
           <div class="col-6">Role</div>
-          <div class="col-6">{{user.role}}</div>
+          <div class="col-6">{{ user.role }}</div>
 
           <div class="w-100 d-none d-md-block"></div>
 
@@ -41,7 +29,9 @@
           <div class="w-100 d-none d-md-block"></div>
           <br />
 
-          <button @click="handlePasswordClick" class="col-6 btn btn-dark">Reset Password</button>
+          <button @click="handlePasswordClick" class="col-6 btn btn-dark">
+            Reset Password
+          </button>
           <div class="col-6">
             <input v-model="newPassword" placeholder="Enter new password" />
           </div>
@@ -49,10 +39,9 @@
         <br />
       </div>
 
-      <button
-        @click="$router.push('/loads')"
-        class="btn btn-link"
-      >{{isDriver ? 'Assigned' : 'Created'}} Loads</button>
+      <button @click="$router.push('/loads')" class="btn btn-link">
+        {{ isDriver ? 'Assigned' : 'Created' }} Loads
+      </button>
     </div>
   </div>
 </template>
@@ -102,4 +91,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.profile {
+  width: 100vw;
+}
 </style>
