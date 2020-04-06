@@ -4,6 +4,12 @@
 
 Uber-like web application for freight trucks using REST, Vue.js and MongoDB.
 
+### API Documentation
+
+Uber Node API is documented via [Postman Documentation publisher](https://learning.postman.com/docs/postman-for-publishers/public-api-docs/).
+
+[API Documentation reference for Uber Node collection](https://documenter.getpostman.com/view/9968627/SzYdRaww)
+
 ## Prerequisites
 
 1. Installed Node.js, access to MongoDB database.
