@@ -1,7 +1,6 @@
 <template>
   <div class="loads-page">
     <div class="container">
-
       <div class="row">
         <div class="col">
           <div class="row">
@@ -10,10 +9,11 @@
               v-if="!isDriver"
               @click="handleCreateLoadClick"
               class="btn btn-link"
-            >Create New Load</button>
+            >
+              Create New Load
+            </button>
           </div>
           <section class="panel panel-success" v-if="loads.length">
-
             <table class="table table-striped">
               <tr>
                 <th>Load ID</th>
@@ -40,7 +40,8 @@
                     v-for="state in Object.values(loadStates)"
                     :key="`${state}`"
                     :value="state"
-                  >{{ state }}</option>
+                    >{{ state }}</option
+                  >
                 </select>
                 <td v-else>{{ load.state }}</td>
                 <td class="dimensions">
@@ -56,19 +57,32 @@
                     v-b-modal.modal-xl
                     variant="link"
                     v-else
-                  >Logs</b-button>
+                    >Logs</b-button
+                  >
                 </td>
 
                 <td class="actions" v-if="load.status === 'NEW'">
-                  <button @click="() => handlePostLoadClick(load._id)" class="btn btn-link">Post</button>
+                  <button
+                    @click="() => handlePostLoadClick(load._id)"
+                    class="btn btn-link"
+                  >
+                    Post
+                  </button>
                 </td>
                 <td class="actions" v-if="load.status === 'NEW'">
-                  <button @click="() => handleDeleteLoadClick(load._id)" class="btn btn-link">x</button>
+                  <button
+                    @click="() => handleDeleteLoadClick(load._id)"
+                    class="btn btn-link"
+                  >
+                    x
+                  </button>
                 </td>
               </tr>
             </table>
 
+            <!-- <Pagination /> -->
           </section>
+
           <section class="panel panel-danger" v-else>
             <p>No loads {{ isDriver ? 'assigned' : 'created' }} yet...</p>
           </section>
@@ -76,7 +90,6 @@
       </div>
 
       <LogsModal :currentLoad="currentLoad" />
-
     </div>
   </div>
 </template>
@@ -85,12 +98,14 @@
 import { mapState, mapActions } from 'vuex';
 import { loadStates } from '../globals';
 import LogsModal from '../components/LogsModal';
+// import Pagination from '../components/Pagination';
 
 export default {
   name: 'LoadsPage',
 
   components: {
     LogsModal,
+    // Pagination,
   },
 
   data() {

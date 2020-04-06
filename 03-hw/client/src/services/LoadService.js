@@ -9,10 +9,12 @@ export default {
     };
 
     const response = await fetch(`${BASE_URL}/loads`, requestConfig);
-    const { loads, status } = await handleResponse(response);
+    const { loads, status, _metadata } = await handleResponse(response);
     console.log('Response status:', status);
-    return loads;
+    return { loads, _metadata };
   },
+
+  // TODO: create separate requests for paginated and filtered loads
 
   async create(data) {
     const requestConfig = {
