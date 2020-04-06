@@ -1,6 +1,6 @@
 import { shallowMount } from '@vue/test-utils';
-// // TODO: Example test below
-// import HelloWorld from '@/components/HelloWorld.vue'
+// TODO: Write Unit tests to cover main functionality
+// like so:
 
 // describe('HelloWorld.vue', () => {
 //   it('renders props.msg when passed', () => {

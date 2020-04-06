@@ -3,9 +3,11 @@
     <div class="container">
       <div class="row">
         <div class="col">
-          <div class="row">
+          <div class="row trucks-page__header">
             <h2>Trucks</h2>
-            <button @click="handleCreateTruckClick" class="btn btn-link">Create New Truck</button>
+            <button @click="handleCreateTruckClick" class="btn btn-link">
+              Create New Truck
+            </button>
           </div>
 
           <h5>Created</h5>
@@ -18,7 +20,10 @@
                 <th>Status</th>
                 <th>Type</th>
               </tr>
-              <tr v-for="(truck, i) in createdTrucks" :key="`${truck._id}_${i}`">
+              <tr
+                v-for="(truck, i) in createdTrucks"
+                :key="`${truck._id}_${i}`"
+              >
                 <td>{{ truck._id }}</td>
                 <td>{{ truck.creatorId }}</td>
                 <td>{{ truck.assigneeId || '-' }}</td>
@@ -30,10 +35,17 @@
                     v-if="!truck.assigneeId"
                     @click="() => handleAssignTruckClick(truck._id)"
                     class="btn btn-link"
-                  >Assign</button>
+                  >
+                    Assign
+                  </button>
                 </td>
                 <td class="actions">
-                  <button @click="() => handleDeleteTruckClick(truck._id)" class="btn btn-link">x</button>
+                  <button
+                    @click="() => handleDeleteTruckClick(truck._id)"
+                    class="btn btn-link"
+                  >
+                    x
+                  </button>
                 </td>
               </tr>
             </table>
@@ -60,7 +72,12 @@
                 <td>{{ truck.type }}</td>
 
                 <td class="actions">
-                  <button @click="() => handleDeleteTruckClick(load._id)" class="btn btn-link">x</button>
+                  <button
+                    @click="() => handleDeleteTruckClick(load._id)"
+                    class="btn btn-link"
+                  >
+                    x
+                  </button>
                 </td>
               </tr>
             </table>
@@ -90,17 +107,11 @@ export default {
   },
 
   methods: {
-    // 'getCreatedTrucks' // use later ?
     ...mapActions(['getAllTrucks', 'assignTruck', 'removeTruck']),
 
     handleCreateTruckClick(e) {
       this.$router.push('/trucks/new');
     },
-
-    // handleUpdateLoadClick(id) {
-    // TODO: implement load update later
-    // }
-
     handleAssignTruckClick(id) {
       this.assignTruck(id);
     },
@@ -111,11 +122,21 @@ export default {
   },
 
   created() {
-    // TODO: check caching of trucks when logged out and in
     this.getAllTrucks();
   },
 };
 </script>
 
 <style lang="scss" scoped>
+@import '../media_mixins.scss';
+
+.trucks-page {
+  &__header {
+    display: flex;
+
+    @include phone {
+      justify-content: center;
+    }
+  }
+}
 </style>

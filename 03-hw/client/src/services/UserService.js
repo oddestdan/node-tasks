@@ -12,9 +12,7 @@ const service = {
     const response = await fetch(`${BASE_URL}/login`, requestConfig);
     const { user, status, token } = await handleResponse(response);
 
-    // login successful if there's a jwt token in the response
     if (token) {
-      // assign JWT Token to the user to store in LS
       user.token = token;
       // store user details and jwt token in local storage
       // to keep user logged in between page refreshes

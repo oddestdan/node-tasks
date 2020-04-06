@@ -5,7 +5,7 @@ export function handleResponse(response) {
     if (!response.ok) {
       if (response.status === 401) {
         // TODO: auto logout if 401 response returned from api
-        // logout();
+        // someUsersService.logout();
         // location.reload(true);
       }
 

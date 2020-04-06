@@ -34,6 +34,5 @@ module.exports = {
     indent: 'off',
     'linebreak-style': 0,
     'max-len': ['error', { code: 120 }],
-    // 'no-invalid-this': 'off',
   },
 };

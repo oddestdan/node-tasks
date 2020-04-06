@@ -1,9 +1,9 @@
 <template>
-  <div class="truck-new">
+  <div class="load-new">
     <div class="container">
       <h2>Create New Load</h2>
-      <form @submit.prevent="handleSubmit">
-        <div class="form-group">
+      <form class="load-new__form" @submit.prevent="handleSubmit">
+        <div class="form-group load-new__form-group">
           <label for="dimensions-height">*Height</label>
           <input
             class="form-control"
@@ -16,9 +16,11 @@
           <div
             v-show="submitted && !load.dimensions['height']"
             class="invalid-feedback"
-          >Height is required</div>
+          >
+            Height is required
+          </div>
         </div>
-        <div class="form-group">
+        <div class="form-group load-new__form-group">
           <label for="dimensions-width">*Width</label>
           <input
             class="form-control"
@@ -31,9 +33,11 @@
           <div
             v-show="submitted && !load.dimensions['width']"
             class="invalid-feedback"
-          >Width is required</div>
+          >
+            Width is required
+          </div>
         </div>
-        <div class="form-group">
+        <div class="form-group load-new__form-group">
           <label for="dimensions-length">*Length</label>
           <input
             class="form-control"
@@ -46,9 +50,11 @@
           <div
             v-show="submitted && !load.dimensions['length']"
             class="invalid-feedback"
-          >Length is required</div>
+          >
+            Length is required
+          </div>
         </div>
-        <div class="form-group">
+        <div class="form-group load-new__form-group">
           <label for="payload">*Payload</label>
           <input
             class="form-control"
@@ -58,9 +64,11 @@
             name="payload"
             :class="{ 'is-invalid': submitted && !load.payload }"
           />
-          <div v-show="submitted && !load.payload" class="invalid-feedback">Payload is required</div>
+          <div v-show="submitted && !load.payload" class="invalid-feedback">
+            Payload is required
+          </div>
         </div>
-        <div class="form-group">
+        <div class="form-group load-new__form-group--button">
           <button class="btn btn-dark">Create Load</button>
         </div>
       </form>
@@ -109,7 +117,7 @@ export default {
     handleSubmit(e) {
       this.submitted = true;
       const load = this.parseLoadInput(this.load);
-      const { width, height, length } = load;
+      const { width, height, length } = load.dimensions;
       if (width && height && length && load.payload) {
         this.createLoad(load);
       }
@@ -119,4 +127,25 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import '../media_mixins.scss';
+
+.load-new {
+  &__form {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+  }
+
+  &__form-group {
+    width: 45%;
+
+    &--button {
+      width: 100%;
+    }
+
+    @include phone {
+      width: 100%;
+    }
+  }
+}
 </style>

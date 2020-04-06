@@ -1,4 +1,4 @@
-import { auth, handleResponse } from '../helpers';
+import { auth, handleResponse, downloadBlob } from '../helpers';
 import { BASE_URL } from '../globals';
 
 export default {
@@ -9,10 +9,12 @@ export default {
     };
 
     const response = await fetch(`${BASE_URL}/loads`, requestConfig);
-    const { loads, status } = await handleResponse(response);
+    const { loads, status, _metadata } = await handleResponse(response);
     console.log('Response status:', status);
-    return loads;
+    return { loads, _metadata };
   },
+
+  // TODO: create separate requests for paginated and filtered loads
 
   async create(data) {
     const requestConfig = {
@@ -69,7 +71,6 @@ export default {
     return load;
   },
 
-  // "remove" because delete is a reserved word in JS
   async remove(id) {
     const requestConfig = {
       method: 'DELETE',
@@ -80,5 +81,27 @@ export default {
     const { load, status } = await handleResponse(response);
     console.log('Response status:', status);
     return load;
+  },
+
+  async generatePdf(id) {
+    const requestConfig = {
+      method: 'POST',
+      headers: {
+        ...auth(),
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+    };
+
+    const response = await fetch(`${BASE_URL}/loads/${id}/pdf`, requestConfig);
+    if (!response.ok) {
+      return Promise.reject(response.statusText);
+    }
+
+    const blob = await response.blob();
+    const filename = `logs-load_${id}`;
+
+    downloadBlob(blob, encodeURIComponent(filename) + '.pdf');
+
+    return;
   },
 };

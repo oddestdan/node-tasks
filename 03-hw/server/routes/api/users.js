@@ -93,11 +93,6 @@ router.patch('/users/:id', async (req, res) => {
   }
 });
 
-// const user = await User.findOne({ _id: req.user.userId });
-// if (user.role === 'shipper') {
-//   if (await checkUserIsOnLoad(_id)) {
-// }
-
 // Delete User
 router.delete('/users/:id', (req, res) => {
   if (req.user.userId !== req.params.id) {

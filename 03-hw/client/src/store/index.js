@@ -32,6 +32,11 @@ export default new Vuex.Store({
     // Trucks management
     trucks: [],
 
+    // Loads pagination
+    curPage: 1,
+    perPage: 5,
+    total: 0,
+
     // Weather information
     weather: null,
   },
@@ -96,25 +101,21 @@ export default new Vuex.Store({
 
       // add 'deleting:true' property to user being deleted
 
-      // state.all.items = state.all.items.map(user =>
       state.users = state.users.map(user =>
         user._id === id ? { ...user, deleting: true } : user
       );
     },
     deleteSuccess(state, id) {
-      // remove deleted user from state
-      // state.all.items = state.all.items.filter(user => user._id !== id);
       state.users = state.users.filter(user => user._id !== id);
     },
     deleteFailure(state, { id, error }) {
       // remove 'deleting:true' property and add 'deleteError:[error]'
       // property to user
 
-      // state.all.items = state.items.map(user => {
       state.users = state.users.map(user => {
         if (user.id === id) {
           // make copy of user without 'deleting:true' property
-          // eslint-disable-next-line
+          // eslint-disable-next-line no-unused-vars
           const { deleting, ...userCopy } = user;
           // return copy of user with 'deleteError:[error]' property
           return { ...userCopy, deleteError: error };
@@ -148,8 +149,13 @@ export default new Vuex.Store({
     getAssignedLoadsRequest(state) {
       state.all = { loading: true };
     },
-    getAssignedLoadsSuccess(state, loads) {
+    getAssignedLoadsSuccess(state, { loads, _metadata }) {
       state.loads = loads;
+
+      // Pagination metadata
+      state.curPage = _metadata.page;
+      state.perPage = _metadata.rpp;
+      state.total = _metadata.totalCount;
     },
     getAssignedLoadsFailure(state, error) {
       state.all = { error };
@@ -181,6 +187,9 @@ export default new Vuex.Store({
     },
     deleteLoadSuccess(state, id) {
       state.loads = state.loads.filter(load => load._id !== id);
+    },
+    generatePdfSuccess() {
+      console.log('Successfully generator PDF logs file');
     },
 
     // Trucks management
@@ -225,10 +234,21 @@ export default new Vuex.Store({
       state.trucks = state.trucks.filter(truck => truck._id !== id);
     },
 
+    // Loads pagination
+    setCurPage(state, value) {
+      state.curPage = value;
+    },
+    prevPage(state) {
+      state.curPage = state.curPage - 1;
+    },
+    nextPage(state) {
+      state.curPage = state.curPage + 1;
+    },
+
     // Weather information
     getWeather(state, weather) {
       state.weather = weather;
-    }
+    },
   },
 
   actions: {
@@ -331,7 +351,8 @@ export default new Vuex.Store({
       commit('getAssignedLoadsRequest');
 
       LoadService.getAll().then(
-        loads => commit('getAssignedLoadsSuccess', loads),
+        ({ loads, _metadata }) =>
+          commit('getAssignedLoadsSuccess', { loads, _metadata }),
         error => commit('getAssignedLoadsFailure', error)
       );
     },
@@ -369,6 +390,12 @@ export default new Vuex.Store({
 
       LoadService.remove(id).then(
         load => commit('deleteLoadSuccess', load._id),
+        error => console.log(error.toString())
+      );
+    },
+    generateLoadPdf({ commit }, id) {
+      LoadService.generatePdf(id).then(
+        () => commit('generatePdfSuccess'),
         error => console.log(error.toString())
       );
     },
@@ -431,9 +458,11 @@ export default new Vuex.Store({
   },
 
   modules: {
+    // TODO: reorder into separate store modules:
     // user
     // account
     // load
     // truck
+    // weather
   },
 });

@@ -20,11 +20,11 @@ const routes = [
     name: 'Register',
     component: () => import('../views/Register.vue'),
   },
-  {
-    path: '/users',
-    name: 'Users',
-    component: () => import('../views/Users.vue'),
-  },
+  // {
+    // path: '/users',
+    // name: 'Users',
+    // component: () => import('../views/Users.vue'),
+  // },
   {
     path: '/profile',
     name: 'Profile',

@@ -52,7 +52,6 @@ module.exports.handleLoadsPagination = (loads, _metadata, params) => {
   return paginatedLoads;
 };
 
-// statuses: [ new | posted | assigned | shipper ]
 module.exports.handleLoadsStatusFiltering = (loads, _metadata, params) => {
   let filteredLoads = [...loads];
 
@@ -68,3 +67,6 @@ module.exports.handleLoadsStatusFiltering = (loads, _metadata, params) => {
 
   return filteredLoads;
 };
+
+module.exports.convertLogsToString = logs =>
+  logs.map(log => `${log.time} | ${log.message}`).join('\n').replace(/\r/, '');

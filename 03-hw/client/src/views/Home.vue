@@ -9,3 +9,15 @@ export default {
   name: 'Home',
 };
 </script>
+
+<style lang="scss" scoped>
+@import '../media_mixins.scss';
+
+.home {
+  padding: 0 5px;
+
+  @include phone {
+    text-align: center;
+  }
+}
+</style>

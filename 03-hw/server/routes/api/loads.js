@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const PDFDocument = require('pdfkit');
 
 const { User, Load, Truck } = require('../../models');
 const { statuses, loadStates } = require('../../globals');
@@ -7,7 +8,8 @@ const { statuses, loadStates } = require('../../globals');
 const {
   findTruckCandidate,
   handleLoadsStatusFiltering,
-  handleLoadsPagination
+  handleLoadsPagination,
+  convertLogsToString
 } = require('./helpers');
 const { parseUrlParams } = require('../../utils');
 
@@ -50,14 +52,6 @@ router.get('/loads/:id', (req, res) => {
 
 // Create Load
 router.post('/loads', async (req, res) => {
-  // creatorId: Assigned by current User-Shipper
-  // assigneeId: default ''
-  // logs: default []
-  // status: default 'NEW'
-  // state: default ''
-  // dimensions: Specified at UI (Object)
-  // payload: Specified at UI (Number)
-
   const { dimensions, payload } = req.body;
   const { role, _id } = await User.findOne({ _id: req.user.userId });
 
@@ -214,6 +208,32 @@ router.delete('/loads/:id', async (req, res) => {
     } else {
       res.status(400).json({ status: 'Load is no longer NEW' });
     }
+  } catch (error) {
+    res.status(500).json({ status: error.message });
+  }
+});
+
+// Generate PDF report of Load's logs
+router.post('/loads/:id/pdf', async (req, res) => {
+  try {
+    const load = await Load.findById(req.params.id);
+
+    let filename = `logs-load_${req.params.id}`;
+    let content = load.logs.length === 0 ?
+      'No logs added yet.' :
+      load.logs.join('\n');
+
+    content = convertLogsToString(load.logs);
+    filename = encodeURIComponent(filename) + '.pdf';
+
+    res.setHeader('Content-disposition', `attachment; filename="${filename}"`);
+    res.setHeader('Content-type', 'application/pdf');
+
+    const doc = new PDFDocument();
+    doc.y = 300;
+    doc.text(content, 50, 50);
+    doc.pipe(res);
+    doc.end();
   } catch (error) {
     res.status(500).json({ status: error.message });
   }

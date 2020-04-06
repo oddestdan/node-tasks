@@ -11,7 +11,6 @@ module.exports = Joi.object().keys({
     .max(30)
     .label('Username'),
   password: Joi.string()
-    // .required()
     .regex(passwRegex)
     // .options({
     //   language: { // for some reason is not supported
