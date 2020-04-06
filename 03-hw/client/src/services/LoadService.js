@@ -1,4 +1,4 @@
-import { auth, handleResponse } from '../helpers';
+import { auth, handleResponse, downloadBlob } from '../helpers';
 import { BASE_URL } from '../globals';
 
 export default {
@@ -80,5 +80,27 @@ export default {
     const { load, status } = await handleResponse(response);
     console.log('Response status:', status);
     return load;
+  },
+
+  async generatePdf(id) {
+    const requestConfig = {
+      method: 'POST',
+      headers: {
+        ...auth(),
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+    };
+
+    const response = await fetch(`${BASE_URL}/loads/${id}/pdf`, requestConfig);
+    if (!response.ok) {
+      return Promise.reject(response.statusText);
+    }
+
+    const blob = await response.blob();
+    const filename = `logs-load_${id}`;
+
+    downloadBlob(blob, encodeURIComponent(filename) + '.pdf');
+
+    return;
   },
 };

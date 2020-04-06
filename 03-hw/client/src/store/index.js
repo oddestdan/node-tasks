@@ -182,6 +182,9 @@ export default new Vuex.Store({
     deleteLoadSuccess(state, id) {
       state.loads = state.loads.filter(load => load._id !== id);
     },
+    generatePdfSuccess() {
+      console.log('Successfully generator PDF logs file');
+    },
 
     // Trucks management
     getTrucksRequest(state) {
@@ -369,6 +372,12 @@ export default new Vuex.Store({
 
       LoadService.remove(id).then(
         load => commit('deleteLoadSuccess', load._id),
+        error => console.log(error.toString())
+      );
+    },
+    generateLoadPdf({ commit }, id) {
+      LoadService.generatePdf(id).then(
+        () => commit('generatePdfSuccess'),
         error => console.log(error.toString())
       );
     },
