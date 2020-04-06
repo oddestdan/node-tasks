@@ -68,3 +68,6 @@ module.exports.handleLoadsStatusFiltering = (loads, _metadata, params) => {
 
   return filteredLoads;
 };
+
+module.exports.convertLogsToString = logs =>
+  logs.map(log => `${log.time} | ${log.message}`).join('\n').replace(/\r/, '');
