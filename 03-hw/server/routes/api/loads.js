@@ -9,7 +9,7 @@ const {
   findTruckCandidate,
   handleLoadsStatusFiltering,
   handleLoadsPagination,
-  convertLogsToString
+  convertLogsToString,
 } = require('./helpers');
 const { parseUrlParams } = require('../../utils');
 
@@ -21,7 +21,7 @@ router.get('/loads', async (req, res) => {
     const { username, _id } = await User.findOne({ _id: req.user.userId });
 
     let loads = await Load.find({
-      $or: [{ creatorId: _id }, { assigneeId: _id }]
+      $or: [{ creatorId: _id }, { assigneeId: _id }],
     });
 
     if (loads.length === 0) {
@@ -30,7 +30,7 @@ router.get('/loads', async (req, res) => {
         .json({ status: `No loads found for user: ${username}` });
     }
 
-    const _metadata = { page: 1, rpp: 5, totalCount: loads.length };
+    const _metadata = { page: 1, rpp: 100, totalCount: loads.length };
 
     loads = handleLoadsStatusFiltering(loads, _metadata, params);
     loads = handleLoadsPagination(loads, _metadata, params);
@@ -44,8 +44,8 @@ router.get('/loads', async (req, res) => {
 // Get Load
 router.get('/loads/:id', (req, res) => {
   Load.findById(req.params.id)
-    .then(load => res.json({ status: `Showing load ${load._id}`, load }))
-    .catch(e => {
+    .then((load) => res.json({ status: `Showing load ${load._id}`, load }))
+    .catch((e) => {
       res.status(500).json({ status: e.message });
     });
 });
@@ -68,7 +68,7 @@ router.post('/loads', async (req, res) => {
       .then(() => {
         res.json({ status: 'New load created', load });
       })
-      .catch(e => {
+      .catch((e) => {
         res.status(500).json({ status: e.message });
       });
   } else {
@@ -94,8 +94,8 @@ router.patch('/loads/:id/post', async (req, res) => {
         ...load.logs,
         {
           message: `Unable to find fitting truck`,
-          time: new Date().toISOString()
-        }
+          time: new Date().toISOString(),
+        },
       ];
       await load.save();
       return res.status(404).json({ status: 'Unable to find fitting truck' });
@@ -111,15 +111,15 @@ router.patch('/loads/:id/post', async (req, res) => {
       ...load.logs,
       {
         message: `Found fitting truck. State update: ${load.state}`,
-        time: new Date().toISOString()
-      }
+        time: new Date().toISOString(),
+      },
     ];
     await load.save();
 
     return res.json({
       status: 'Found an appropriate truck candidate for the load',
       load,
-      truckCandidate
+      truckCandidate,
     });
   } catch (error) {
     return res.status(500).json({ status: error.message });
@@ -139,7 +139,7 @@ router.put('/loads/:id', async (req, res) => {
       Object.assign(load, req.body);
       load.logs = [
         ...load.logs,
-        { message: `Updated load`, time: new Date().toISOString() }
+        { message: `Updated load`, time: new Date().toISOString() },
       ];
       await load.save();
 
@@ -184,13 +184,13 @@ router.patch('/loads/:id/state', async (req, res) => {
     load.state = state;
     load.logs = [
       ...load.logs,
-      { message: `State update: ${state}`, time: new Date().toISOString() }
+      { message: `State update: ${state}`, time: new Date().toISOString() },
     ];
     await load.save();
 
     res.json({
       status: `Load state updated: ${state}. Load status: ${load.status}`,
-      load
+      load,
     });
   } catch (error) {
     res.status(500).json({ status: error.message });
@@ -219,9 +219,8 @@ router.post('/loads/:id/pdf', async (req, res) => {
     const load = await Load.findById(req.params.id);
 
     let filename = `logs-load_${req.params.id}`;
-    let content = load.logs.length === 0 ?
-      'No logs added yet.' :
-      load.logs.join('\n');
+    let content =
+      load.logs.length === 0 ? 'No logs added yet.' : load.logs.join('\n');
 
     content = convertLogsToString(load.logs);
     filename = encodeURIComponent(filename) + '.pdf';
