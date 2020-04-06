@@ -4,27 +4,39 @@ const router = express.Router();
 const { User, Load, Truck } = require('../../models');
 const { statuses, loadStates } = require('../../globals');
 
-const { findTruckCandidate } = require('./helpers');
+const {
+  findTruckCandidate,
+  handleLoadsStatusFiltering,
+  handleLoadsPagination
+} = require('./helpers');
+const { parseUrlParams } = require('../../utils');
 
 // Get Created Loads or Get Assigned Loads
 router.get('/loads', async (req, res) => {
-  const { username, _id } = await User.findOne({ _id: req.user.userId });
+  const params = parseUrlParams(req.url);
 
-  Load.find({
-    $or: [{ creatorId: _id }, { assigneeId: _id }]
-  })
-    .then(loads => {
-      if (loads.length) {
-        res.json({ status: `Showing loads of user ${username}`, loads });
-      } else {
-        res
-          .status(404)
-          .json({ status: `No loads found for user: ${username}` });
-      }
-    })
-    .catch(e => {
-      res.status(500).json({ status: e.message });
+  try {
+    const { username, _id } = await User.findOne({ _id: req.user.userId });
+
+    let loads = await Load.find({
+      $or: [{ creatorId: _id }, { assigneeId: _id }]
     });
+
+    if (loads.length === 0) {
+      return res
+        .status(404)
+        .json({ status: `No loads found for user: ${username}` });
+    }
+
+    const _metadata = { page: 1, rpp: 5, totalCount: loads.length };
+
+    loads = handleLoadsStatusFiltering(loads, _metadata, params);
+    loads = handleLoadsPagination(loads, _metadata, params);
+
+    res.json({ status: `Showing loads of user ${username}`, _metadata, loads });
+  } catch (error) {
+    res.status(500).json({ status: error.message });
+  }
 });
 
 // Get Load
@@ -146,7 +158,7 @@ router.put('/loads/:id', async (req, res) => {
   }
 });
 
-// Update Load status (for driver)
+// Update Load state (for driver)
 router.patch('/loads/:id/state', async (req, res) => {
   const user = await User.findOne({ _id: req.user.userId });
 
@@ -183,7 +195,8 @@ router.patch('/loads/:id/state', async (req, res) => {
     await load.save();
 
     res.json({
-      status: `Load state updated: ${state}. Load status: ${load.status}`
+      status: `Load state updated: ${state}. Load status: ${load.status}`,
+      load
     });
   } catch (error) {
     res.status(500).json({ status: error.message });

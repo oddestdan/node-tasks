@@ -1,16 +1,10 @@
-const fs = require('fs');
+const { readFile, updateFile } = require('./file');
+const generateWeatherApiUrl = require('./generateWeatherApiUrl');
+const parseUrlParams = require('./parseUrlParams');
 
-const prettyStringify = data => JSON.stringify(data, null, 2);
-
-const readFile = (filePath, defaultBody) => {
-  if (!fs.existsSync(filePath)) {
-    fs.writeFileSync(filePath, prettyStringify(defaultBody));
-  }
-  return fs.readFileSync(filePath, 'utf8');
+module.exports = {
+  readFile,
+  updateFile,
+  generateWeatherApiUrl,
+  parseUrlParams,
 };
-
-const updateFile = (filePath, updatedData) => {
-  fs.writeFileSync(filePath, prettyStringify(updatedData));
-};
-
-module.exports = { readFile, updateFile };

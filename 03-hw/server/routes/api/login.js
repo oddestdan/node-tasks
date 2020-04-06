@@ -1,9 +1,6 @@
 const express = require('express');
 const router = express.Router();
 
-const bcrypt = require('bcryptjs');
-const { saltFactor } = require('config').get('password');
-
 const jwt = require('jsonwebtoken');
 const { secret } = require('config').get('jwt');
 

@@ -10,7 +10,7 @@ const app = express();
 const config = require('config');
 const { port } = config.get('server');
 const { username, password, cluster, dbname } = config.get('db');
-const dbURI = `mongodb+srv://${username}:${password}@${cluster}/${dbname}?retryWrites=true&w=majority`;
+const dbURI = `mongodb+srv://${username}:${password}@${cluster}/${dbname}`;
 
 // Logging
 const logger = pino({ level: process.env.LOG_LEVEL || 'info' });
@@ -28,15 +28,15 @@ process.on(
 mongoose
   .connect(dbURI, {
     useNewUrlParser: true,
-    useUnifiedTopology: true
+    useUnifiedTopology: true,
   })
   .then(() => logger.info('MongoDB connected'))
-  .catch(err => logger.error(err));
+  .catch((err) => logger.error(err));
 
-// Backend middleware
 app.use(cors());
 app.use(express.json());
 
+app.use('/api', require('./routes/api/weather'));
 app.use('/api', require('./routes/api/register'));
 app.use('/api', require('./routes/api/login'));
 
@@ -46,5 +46,4 @@ app.use('/api', require('./routes/api/users'));
 app.use('/api', require('./routes/api/loads'));
 app.use('/api', require('./routes/api/trucks'));
 
-// app.listen(port, () => console.log(`Server started on port ${port}`));
 app.listen(port, () => logger.info(`Server started on port ${port}`));

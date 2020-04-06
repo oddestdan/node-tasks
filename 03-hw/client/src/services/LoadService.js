@@ -52,6 +52,23 @@ export default {
     return load;
   },
 
+  async updateState({ _id, data }) {
+    console.log({ _id, data });
+    const requestConfig = {
+      method: 'PATCH',
+      headers: { ...auth(), 'Content-Type': 'application/json' },
+      body: JSON.stringify(data),
+    };
+
+    const response = await fetch(
+      `${BASE_URL}/loads/${_id}/state`,
+      requestConfig
+    );
+    const { load, status } = await handleResponse(response);
+    console.log('Response status:', status);
+    return load;
+  },
+
   // "remove" because delete is a reserved word in JS
   async remove(id) {
     const requestConfig = {
