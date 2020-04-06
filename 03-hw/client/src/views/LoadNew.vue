@@ -117,7 +117,7 @@ export default {
     handleSubmit(e) {
       this.submitted = true;
       const load = this.parseLoadInput(this.load);
-      const { width, height, length } = load;
+      const { width, height, length } = load.dimensions;
       if (width && height && length && load.payload) {
         this.createLoad(load);
       }

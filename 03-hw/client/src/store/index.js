@@ -32,6 +32,11 @@ export default new Vuex.Store({
     // Trucks management
     trucks: [],
 
+    // Loads pagination
+    curPage: 1,
+    perPage: 5,
+    total: 0,
+
     // Weather information
     weather: null,
   },
@@ -144,8 +149,13 @@ export default new Vuex.Store({
     getAssignedLoadsRequest(state) {
       state.all = { loading: true };
     },
-    getAssignedLoadsSuccess(state, loads) {
+    getAssignedLoadsSuccess(state, { loads, _metadata }) {
       state.loads = loads;
+
+      // Pagination metadata
+      state.curPage = _metadata.page;
+      state.perPage = _metadata.rpp;
+      state.total = _metadata.totalCount;
     },
     getAssignedLoadsFailure(state, error) {
       state.all = { error };
@@ -224,10 +234,21 @@ export default new Vuex.Store({
       state.trucks = state.trucks.filter(truck => truck._id !== id);
     },
 
+    // Loads pagination
+    setCurPage(state, value) {
+      state.curPage = value;
+    },
+    prevPage(state) {
+      state.curPage = state.curPage - 1;
+    },
+    nextPage(state) {
+      state.curPage = state.curPage + 1;
+    },
+
     // Weather information
     getWeather(state, weather) {
       state.weather = weather;
-    }
+    },
   },
 
   actions: {
@@ -330,7 +351,8 @@ export default new Vuex.Store({
       commit('getAssignedLoadsRequest');
 
       LoadService.getAll().then(
-        loads => commit('getAssignedLoadsSuccess', loads),
+        ({ loads, _metadata }) =>
+          commit('getAssignedLoadsSuccess', { loads, _metadata }),
         error => commit('getAssignedLoadsFailure', error)
       );
     },

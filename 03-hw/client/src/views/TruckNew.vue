@@ -74,7 +74,7 @@ export default {
       const typeValue = this.types[type];
       const info = this.typesInfo[typeValue];
       const { height, width, length } = info.dimensions;
-      return `${height} x ${width} x ${length} / ${typeInfo.payload}`;
+      return `${height} x ${width} x ${length} / ${info.payload}`;
     },
   },
 };
