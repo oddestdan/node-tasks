@@ -69,7 +69,6 @@ export default {
     return load;
   },
 
-  // "remove" because delete is a reserved word in JS
   async remove(id) {
     const requestConfig = {
       method: 'DELETE',

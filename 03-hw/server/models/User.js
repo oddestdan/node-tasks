@@ -16,11 +16,11 @@ const UserSchema = new mongoose.Schema(
     password: { type: String },
     role: { type: String },
     email: {
-      type: String
-      // validate: {
-      //   validator: email => User.doesntExistWith({ email }),
-      //   message: ({ value }) => `Email ${value} is already taken`
-      // }
+      type: String,
+      validate: {
+        validator: email => User.doesntExistWith({ email }),
+        message: ({ value }) => `Email ${value} is already taken`
+      }
     },
     phone: { type: String, default: '' },
     info: { type: String, default: '' }

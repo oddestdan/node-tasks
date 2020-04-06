@@ -96,25 +96,21 @@ export default new Vuex.Store({
 
       // add 'deleting:true' property to user being deleted
 
-      // state.all.items = state.all.items.map(user =>
       state.users = state.users.map(user =>
         user._id === id ? { ...user, deleting: true } : user
       );
     },
     deleteSuccess(state, id) {
-      // remove deleted user from state
-      // state.all.items = state.all.items.filter(user => user._id !== id);
       state.users = state.users.filter(user => user._id !== id);
     },
     deleteFailure(state, { id, error }) {
       // remove 'deleting:true' property and add 'deleteError:[error]'
       // property to user
 
-      // state.all.items = state.items.map(user => {
       state.users = state.users.map(user => {
         if (user.id === id) {
           // make copy of user without 'deleting:true' property
-          // eslint-disable-next-line
+          // eslint-disable-next-line no-unused-vars
           const { deleting, ...userCopy } = user;
           // return copy of user with 'deleteError:[error]' property
           return { ...userCopy, deleteError: error };
@@ -440,9 +436,11 @@ export default new Vuex.Store({
   },
 
   modules: {
+    // TODO: reorder into separate store modules:
     // user
     // account
     // load
     // truck
+    // weather
   },
 });

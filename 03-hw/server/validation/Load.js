@@ -11,18 +11,10 @@ module.exports = Joi.object().keys({
     .label('AssigneeId'),
   logs: Joi.object().label('Logs'),
   status: Joi.string()
-    .valid('NEW', 'POSTED', 'ASSIGNED', 'SHIPPED')
-    // .valid(Object.values(statuses.load))
+    .valid(...Object.values(statuses.load))
     .label('Status'),
   state: Joi.string()
-    .valid(
-      '',
-      'EN_ROUTE_TO_PICK_UP',
-      'ARRIVED_TO_PICK_UP',
-      'EN_ROUTE_TO_DELIVERY',
-      'ARRIVED_TO_DELIVERY'
-    )
-    // .valid(Object.values(loadStates)),
+    .valid(...Object.values(loadStates))
     .label('State'),
   dimensions: Joi.object()
     .keys({

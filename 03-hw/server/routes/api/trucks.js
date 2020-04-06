@@ -46,13 +46,6 @@ router.get('/trucks/:id', (req, res) => {
 
 // Create Truck
 router.post('/trucks', async (req, res) => {
-  // creatorId: Assigned by creator User-Driver
-  // assigneeId: default ''
-  // status: default ''
-  // type: Specified at UI, one of the hardcoded ones
-  // // 300x250x170, 1700 - SPRINTER
-  // // 500x250x170, 2500 - SMALL_STRAIGHT
-  // // 700x350x200, 4000 - LARGE_STRAIGHT
   const { type } = req.body;
   const { role, _id } = await User.findOne({ _id: req.user.userId });
 

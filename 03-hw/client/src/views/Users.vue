@@ -5,7 +5,6 @@
         <div class="col-xs-12">
           <h1>Users</h1>
           <section class="panel panel-success" v-if="users.length">
-            <!-- <div class="panel-heading">List of users</div> -->
             <table class="table table-striped">
               <tr>
                 <th>ID</th>
@@ -15,8 +14,6 @@
                 <th>Email</th>
               </tr>
               <tr v-for="(user, i) in users" :key="`${user.username}_${i}`">
-                <!-- <router-link to="/user/:id">
-                {{ user.username }}</router-link>-->
                 <td>{{ user._id }}</td>
                 <td>{{ user.username }}</td>
                 <td>{{ user.role }}</td>

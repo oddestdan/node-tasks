@@ -11,11 +11,9 @@ module.exports = Joi.object().keys({
     .alphanum()
     .label('AssigneeId'),
   status: Joi.string()
-    .valid('IS', 'OL')
-    // .valid(Object.keys(statuses.truck))
+    .valid(...Object.keys(statuses.truck))
     .label('Status'),
   type: Joi.string()
-    .valid('SPRINTER', 'SMALL_STRAIGHT', 'LARGE_STRAIGHT')
-    // .valid(Object.keys(truckTypeInfo))
+    .valid(...Object.keys(truckTypeInfo))
     .label('Type')
 });

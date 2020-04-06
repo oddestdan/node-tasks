@@ -131,7 +131,6 @@ export default {
   },
 
   created() {
-    // TODO: check caching of loads when logged out and in
     this.getLoads();
   },
 };
