@@ -158,4 +158,36 @@ router.get('/users/:id/shipping', async (req, res) => {
   }
 });
 
+// File storage and image uploading
+const multer = require('multer');
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, 'uploads/');
+  },
+  filename: (req, file, cb) => {
+    console.log(file);
+    cb(null, file.originalname);
+  },
+});
+
+// Upload avatar
+router.post('/users/:id/avatar', (req, res, next) => {
+  if (req.user.userId !== req.params.id) {
+    return res.status(401).json({ status: `User can't delete another user` });
+  }
+
+  try {
+    const upload = multer({ storage }).single('name-of-input-key');
+    upload(req, res, (err) => {
+      if (err) {
+        return res.send(err);
+      }
+      res.json({ status: 'Successful image file upload', file: req.file });
+    });
+  } catch (error) {
+    res.status(500).json({ status: error.message });
+  }
+});
+
 module.exports = router;
+
