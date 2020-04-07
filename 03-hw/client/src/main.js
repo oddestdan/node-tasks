@@ -4,14 +4,24 @@ import router from './router';
 import store from './store';
 import '@/plugins/bootstrap';
 import { BootstrapVue } from 'bootstrap-vue';
+// import { IconsPlugin } from 'bootstrap-vue'; // optional
+import socketio from 'socket.io-client';
+import VueSocketIO from 'vue-socket.io';
 
-// Optionally install the BootstrapVue icon components plugin
-// import { IconsPlugin } from 'bootstrap-vue';
 import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap-vue/dist/bootstrap-vue.css';
 
 Vue.use(BootstrapVue);
-// Vue.use(IconsPlugin)
+// Vue.use(IconsPlugin) // optional
+
+const SocketInstance = socketio.connect('http://localhost:8081');
+Vue.use(
+  new VueSocketIO({
+    debug: true,
+    connection: SocketInstance,
+  }),
+  store
+);
 
 Vue.config.productionTip = false;
 

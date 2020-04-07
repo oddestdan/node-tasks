@@ -46,4 +46,11 @@ app.use('/api', require('./routes/api/users'));
 app.use('/api', require('./routes/api/loads'));
 app.use('/api', require('./routes/api/trucks'));
 
-app.listen(port, () => logger.info(`Server started on port ${port}`));
+const httpServer = app.listen(port, () =>
+  logger.info(`Server started on port ${port}`)
+);
+
+// Web Sockets
+const io = require('socket.io')(httpServer);
+const sockets = require('./sockets');
+sockets(io);

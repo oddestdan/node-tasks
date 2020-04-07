@@ -7,6 +7,11 @@
     <div class="header__menu">
       <router-link class="header__link" to="/">Home</router-link>
       <span class="header__separator">|</span>
+
+      <!-- debug -->
+      <router-link class="header__link" to="/chat">Chat</router-link>
+      <span class="header__separator">|</span>
+
       <!-- <router-link class="header__link" to="/users">Users</router-link> -->
       <!-- <span class="header__separator">|</span> -->
       <router-link class="header__link" to="/profile">Profile</router-link>

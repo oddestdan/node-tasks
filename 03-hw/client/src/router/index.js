@@ -21,9 +21,9 @@ const routes = [
     component: () => import('../views/Register.vue'),
   },
   // {
-    // path: '/users',
-    // name: 'Users',
-    // component: () => import('../views/Users.vue'),
+  // path: '/users',
+  // name: 'Users',
+  // component: () => import('../views/Users.vue'),
   // },
   {
     path: '/profile',
@@ -49,6 +49,11 @@ const routes = [
     path: '/trucks/new',
     name: 'TruckNew',
     component: () => import('../views/TruckNew.vue'),
+  },
+  {
+    path: '/chat',
+    name: 'ChatRoom',
+    component: () => import('../views/ChatRoom.vue'),
   },
 ];
 

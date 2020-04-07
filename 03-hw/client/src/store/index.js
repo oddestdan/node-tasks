@@ -39,9 +39,27 @@ export default new Vuex.Store({
 
     // Weather information
     weather: null,
+
+    // Sockets
+    isConnected: false,
+    socketMessage: '',
   },
 
   mutations: {
+    // Sockets
+    SOCKET_CONNECT(state) {
+      console.log('Mutating SOCKET_CONNECT');
+      state.isConnected = true;
+    },
+    SOCKET_DISCONNECT(state) {
+      console.log('Mutating SOCKET_DISCONNECT');
+      state.isConnected = false;
+    },
+    SOCKET_MESSAGECHANNEL(state, message) {
+      console.log('Mutating SOCKET_MESSAGECHANNEL');
+      state.socketMessage = message;
+    },
+
     SET: (state, { key, value }) => (state[key] = value),
 
     // Validations and alerts
