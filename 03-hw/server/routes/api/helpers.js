@@ -1,6 +1,10 @@
 const { statuses, truckTypeInfo } = require('../../globals');
 const { Truck } = require('../../models');
 
+// File storage and avatar image upload
+const fs = require('fs');
+const multer = require('multer');
+
 module.exports.checkUserIsOnLoad = async assigneeId => {
   const userAssignedTruck = await Truck.findOne({ assigneeId });
   return (
@@ -70,3 +74,14 @@ module.exports.handleLoadsStatusFiltering = (loads, _metadata, params) => {
 
 module.exports.convertLogsToString = logs =>
   logs.map(log => `${log.time} | ${log.message}`).join('\n').replace(/\r/, '');
+
+module.exports.tempSaveToServer = (path, tag) => {
+  const storage = multer.diskStorage({
+    destination: (req, file, cb) => cb(null, path),
+    filename: (req, file, cb) => cb(null, file.originalname),
+  });
+
+  return multer({ storage }).single(tag);
+};
+
+module.exports.removeTempFromServer = (path) => fs.unlinkSync(path);

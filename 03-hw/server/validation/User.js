@@ -34,5 +34,7 @@ module.exports = Joi.object().keys({
   info: Joi.string()
     .alphanum()
     .max(120)
-    .label('Info')
+    .label('Info'),
+  avatar: Joi.string()
+    .label('Avatar')
 });
