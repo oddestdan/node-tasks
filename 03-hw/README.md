@@ -38,11 +38,15 @@ npm run serve
 cd server
 npm i
 npm run start
-```
 
-Alternatives to the last command:
-`npm run watch` for **nodemon service**
-`npm run dev` for "pretty" pino **request logging**, or run the following command directly: `LOG_LEVEL=debug node index.js | ./node_modules/.bin/pino-pretty`
+// or run node service with pretty pino request logging
+
+npm run dev
+
+// or run nodemon with pretty pino
+
+npm run watch
+```
 
 ### Database (MongoDB)
 
