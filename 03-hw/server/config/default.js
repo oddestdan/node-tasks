@@ -36,6 +36,11 @@ const config = {
     },
     APIkey: '<OPEN_WEATHER_MAP_API_KEY>',
   },
+  fileUpload: {
+    cloud_name: '<your_cloudinary_cloudname>',
+    api_key: '<your_cloudinary_apikey>',
+    api_secret: '<your_cloudinary_apisecret>',
+  },
 };
 
 module.exports = config;

@@ -23,7 +23,8 @@ const UserSchema = new mongoose.Schema(
       }
     },
     phone: { type: String, default: '' },
-    info: { type: String, default: '' }
+    info: { type: String, default: '' },
+    avatar: { type: String, default: '' },
   },
   {
     timestamps: true

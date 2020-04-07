@@ -34,6 +34,11 @@ const config = {
     },
     APIkey: 'WEATHER_API_KEY',
   },
+  fileUpload: {
+    cloud_name: 'FILE_UPLOAD_CLOUD_NAME',
+    api_key: 'FILE_UPLOAD_API_KEY',
+    api_secret: 'FILE_UPLOAD_API_SECRET',
+  },
 };
 
 module.exports = config;
