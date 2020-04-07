@@ -1,12 +1,20 @@
 const express = require('express');
 const router = express.Router();
 
+// Password encryption
 const bcrypt = require('bcryptjs');
 const { saltFactor } = require('config').get('password');
 
-const { User, Load } = require('../../models');
+// File storage and avatar image upload
+const cloudinary = require('cloudinary').v2;
+const fileUpload = require('config').get('fileUpload');
 
-const { checkUserIsOnLoad } = require('./helpers');
+const { User, Load } = require('../../models');
+const {
+  checkUserIsOnLoad,
+  tempSaveToServer,
+  removeTempFromServer,
+} = require('./helpers');
 
 // Get All Users
 router.get('/users', (req, res) => {
@@ -158,31 +166,47 @@ router.get('/users/:id/shipping', async (req, res) => {
   }
 });
 
-// File storage and image uploading
-const multer = require('multer');
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, 'uploads/');
-  },
-  filename: (req, file, cb) => {
-    console.log(file);
-    cb(null, file.originalname);
-  },
-});
-
 // Upload avatar
 router.post('/users/:id/avatar', (req, res, next) => {
   if (req.user.userId !== req.params.id) {
-    return res.status(401).json({ status: `User can't delete another user` });
+    return res
+      .status(401)
+      .json({ status: `User can't update another user's avatar` });
   }
 
   try {
-    const upload = multer({ storage }).single('name-of-input-key');
+    const upload = tempSaveToServer('uploads/', 'input-image');
+
     upload(req, res, (err) => {
       if (err) {
-        return res.send(err);
+        return res.status(500).json({ status: error.message });
       }
-      res.json({ status: 'Successful image file upload', file: req.file });
+
+      // Send image to cloudinary
+      const path = req.file.path;
+      const uniqueFilename = new Date().toISOString();
+      cloudinary.config(fileUpload);
+      cloudinary.uploader.upload(
+        path,
+        { public_id: `blog/${uniqueFilename}`, tags: `blog` },
+        async (err, image) => {
+          if (err) {
+            return res.status(500).json({ status: error.message });
+          }
+
+          removeTempFromServer(path);
+
+          // Add image link to user account
+          const user = await User.findByIdAndUpdate(
+            req.params.id,
+            { avatar: image.url },
+            { new: true }
+          );
+          return res.json(
+            { status: `User ${user.username} avatar uploaded`, user }
+          );
+        },
+      );
     });
   } catch (error) {
     res.status(500).json({ status: error.message });

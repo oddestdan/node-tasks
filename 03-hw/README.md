@@ -56,9 +56,13 @@ If you prefer to use **local MongoDB**, please proceed to **override** the `dbUR
 
 ### Weather (OpenWeatherMap)
 
-Project uses a free-to-use [OpenWeather API](https://openweathermap.org/api). In order to successfully fetch to the API, it is required to provide your own **OpenWeatherAPI key** (located on the site, in Profile -> API keys) to the project's config.
+Project uses a free-to-use [OpenWeather API](https://openweathermap.org/api). In order to successfully fetch to the API, it is required to provide your own **OpenWeatherAPI key** (located on the site, in `Profile -> API keys`) to the project's config.
 
 _Note_: upon the initial sign up to the OpenWeather API, it might take **several hours** for the key to activate.
+
+### Avatar Upload (Cloudinary)
+
+Project uses a free-to-use subscription for [Cloudinary API](https://cloudinary.com/). In order to successfully fetch to the API, it is required to provide your own **Cloud name**, **API key** and **API secret** (located on the site, in `Dashboard -> Account details`) to the project's config.
 
 ## Project development
 
