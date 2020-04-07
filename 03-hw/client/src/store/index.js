@@ -55,8 +55,8 @@ export default new Vuex.Store({
       console.log('Mutating SOCKET_DISCONNECT');
       state.isConnected = false;
     },
-    SOCKET_MESSAGECHANNEL(state, message) {
-      console.log('Mutating SOCKET_MESSAGECHANNEL');
+    SOCKET_PINGSERVER(state, message) {
+      console.log('PING SERVERD, message:', message);
       state.socketMessage = message;
     },
 
