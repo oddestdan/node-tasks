@@ -39,9 +39,13 @@ cd server
 npm i
 npm run start
 
-// or for nodemon service with pretty pino request logging
+// or run node service with pretty pino request logging
 
 npm run dev
+
+// or run nodemon with pretty pino
+
+npm run watch
 ```
 
 ### Database (MongoDB)
