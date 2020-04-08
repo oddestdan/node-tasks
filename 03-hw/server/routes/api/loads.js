@@ -179,6 +179,7 @@ router.patch('/loads/:id/state', async (req, res) => {
     // Check if load reached delivery destination
     if (state === loadStates['arDelivery']) {
       load.status = statuses.load['shipped'];
+      load.assigneeId = '';
 
       // Reset Truck availability
       const truck = await Truck.findOne({ assigneeId: user._id });
