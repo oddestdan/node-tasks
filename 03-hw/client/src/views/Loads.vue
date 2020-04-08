@@ -37,7 +37,7 @@
                   @change="() => handleStateChange(load)"
                 >
                   <option
-                    v-for="state in Object.values(loadStates)"
+                    v-for="state in loadStatesArray"
                     :key="`${state}`"
                     :value="state"
                     >{{ state }}</option
@@ -96,7 +96,7 @@
 
 <script>
 import { mapState, mapActions } from 'vuex';
-import { loadStates } from '../globals';
+import { loadStatesArray } from '../globals';
 import LogsModal from '../components/LogsModal';
 // import Pagination from '../components/Pagination';
 
@@ -119,7 +119,7 @@ export default {
       user: state => state.user,
       isDriver: state => state.user.role === 'driver',
       loads: state => state.loads,
-      loadStates: () => loadStates,
+      loadStatesArray: () => loadStatesArray,
     }),
   },
 

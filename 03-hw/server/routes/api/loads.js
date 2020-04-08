@@ -107,8 +107,7 @@ router.patch('/loads/:id/post', async (req, res) => {
 
     load.assigneeId = truckCandidate.assigneeId;
     load.status = statuses.load['assigned'];
-    load.state = getNextLoadState(load.state); // TODO: check
-    // load.state = loadStates['erPickUp'];
+    load.state = getNextLoadState(load.state);
     load.logs = [
       ...load.logs,
       {
