@@ -6,7 +6,7 @@ const { User, Truck } = require('../../models');
 const { checkUserIsOnLoad } = require('./helpers');
 
 // Get All Trucks
-router.get('/trucks', (req, res) => {
+router.get('/trucks/all', (req, res) => {
   Truck.find()
     .then(trucks => {
       res.json({ status: 'Showing all trucks', trucks });
@@ -17,7 +17,7 @@ router.get('/trucks', (req, res) => {
 });
 
 // Get Created Trucks
-router.get('/trucks/created', async (req, res) => {
+router.get('/trucks', async (req, res) => {
   const { username, _id } = await User.findOne({ _id: req.user.userId });
 
   Truck.find({ creatorId: _id })
