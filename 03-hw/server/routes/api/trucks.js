@@ -25,7 +25,7 @@ router.get('/trucks', async (req, res) => {
       if (trucks.length) {
         res.json({ status: `Showing trucks created by ${username}`, trucks });
       } else {
-        res.status(400).json({ status: 'No trucks found' });
+        res.json({ status: `No trucks found for user: ${username}` });
       }
     })
     .catch(e => {
@@ -50,7 +50,7 @@ router.post('/trucks', async (req, res) => {
   const { role, _id } = await User.findOne({ _id: req.user.userId });
 
   if (role === 'shipper') {
-    return res.status(400).json({
+    return res.status(403).json({
       status: 'Shipper is unable to create trucks'
     });
   }
@@ -84,7 +84,7 @@ router.patch('/trucks/:id/assign', async (req, res) => {
   const truckId = req.params.id;
 
   if (await checkUserIsOnLoad(_id)) {
-    return res.status(400).json({
+    return res.status(403).json({
       status: 'Driver is unable to self-assign trucks while on load'
     });
   }
@@ -121,7 +121,7 @@ router.put('/trucks/:id', async (req, res) => {
   const { _id, role } = await User.findOne({ _id: req.user.userId });
 
   if (role === 'shipper') {
-    return res.status(400).json({
+    return res.status(403).json({
       status: 'Shipper is unable to update trucks info'
     });
   }
@@ -148,7 +148,7 @@ router.put('/trucks/:id', async (req, res) => {
 router.delete('/trucks/:id', async (req, res) => {
   const { _id, role } = await User.findOne({ _id: req.user.userId });
   if (role === 'shipper') {
-    return res.status(400).json({
+    return res.status(403).json({
       status: 'Shipper is unable to delete trucks'
     });
   }
