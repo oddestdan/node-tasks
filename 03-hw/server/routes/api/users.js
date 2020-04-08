@@ -38,7 +38,7 @@ router.get('/users/:id', (req, res) => {
 router.put('/users/:id', async (req, res) => {
   if (req.user.userId !== req.params.id) {
     return res
-      .status(401)
+      .status(403)
       .json({ status: `User can't change another user's info` });
   }
 
@@ -71,7 +71,7 @@ router.put('/users/:id', async (req, res) => {
 router.patch('/users/:id', async (req, res) => {
   if (req.user.userId !== req.params.id) {
     return res
-      .status(401)
+      .status(403)
       .json({ status: `User can't change another user's password` });
   }
 
@@ -101,7 +101,7 @@ router.patch('/users/:id', async (req, res) => {
 // Delete User
 router.delete('/users/:id', (req, res) => {
   if (req.user.userId !== req.params.id) {
-    return res.status(401).json({ status: `User can't delete another user` });
+    return res.status(403).json({ status: `User can't delete another user` });
   }
 
   User.findByIdAndDelete(req.params.id)
@@ -118,7 +118,7 @@ router.get('/users/:id/load', async (req, res) => {
 
     if (role === 'shipper') {
       return res
-        .status(400)
+        .status(403)
         .json({ status: 'Shippers do not have assigned loads' });
     }
 
@@ -131,7 +131,7 @@ router.get('/users/:id/load', async (req, res) => {
     } else {
       return res
         .status(404)
-        .json({ status: `User ${username} doesn't have any assigned loads` });
+        .json({ status: `Driver ${username} doesn't have any assigned loads` });
     }
   } catch (error) {
     return res.status(500).json({ status: error.message });
@@ -144,7 +144,7 @@ router.get('/users/:id/shipping', async (req, res) => {
     const { _id, role, username } = await User.findById(req.params.id);
 
     if (role === 'driver') {
-      res.status(400).json({ status: `Drivers can't see shipping info` });
+      res.status(403).json({ status: `Drivers can't see shipping info` });
     }
     const loadShippingInfo = await Load.find({ creatorId: _id });
 
@@ -154,8 +154,8 @@ router.get('/users/:id/shipping', async (req, res) => {
         loadShippingInfo
       });
     } else {
-      res.status(404).json({
-        status: `Shipper ${username} doesn't have any shipping loads`
+      res.json({
+        status: `Couldn't find any loads created by shipper ${username}`
       });
     }
   } catch (error) {
@@ -167,7 +167,7 @@ router.get('/users/:id/shipping', async (req, res) => {
 router.post('/users/:id/avatar', (req, res, next) => {
   if (req.user.userId !== req.params.id) {
     return res
-      .status(401)
+      .status(403)
       .json({ status: `User can't update another user's avatar` });
   }
 

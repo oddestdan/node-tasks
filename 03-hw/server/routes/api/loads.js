@@ -26,9 +26,7 @@ router.get('/loads', async (req, res) => {
     });
 
     if (loads.length === 0) {
-      return res
-        .status(404)
-        .json({ status: `No loads found for user: ${username}` });
+      return res.json({ status: `No loads found for user: ${username}` });
     }
 
     const _metadata = { page: 1, rpp: 100, totalCount: loads.length };
@@ -73,7 +71,7 @@ router.post('/loads', async (req, res) => {
         res.status(500).json({ status: e.message });
       });
   } else {
-    res.status(400).json({ status: 'Driver is unable to create loads' });
+    res.status(403).json({ status: 'Driver is unable to create loads' });
   }
 });
 
@@ -99,7 +97,7 @@ router.patch('/loads/:id/post', async (req, res) => {
         },
       ];
       await load.save();
-      return res.status(404).json({ status: 'Unable to find fitting truck' });
+      return res.status(200).json({ status: 'Unable to find fitting truck' });
     }
 
     truckCandidate.status = statuses.truck['onLoad'];
@@ -160,7 +158,7 @@ router.patch('/loads/:id/state', async (req, res) => {
 
   if (user.role === 'shipper') {
     return res
-      .status(400)
+      .status(403)
       .json({ status: 'Shipper is unable to update load status' });
   }
 
