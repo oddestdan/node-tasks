@@ -8,7 +8,7 @@ export default {
       headers: auth(),
     };
 
-    const response = await fetch(`${BASE_URL}/trucks`, requestConfig);
+    const response = await fetch(`${BASE_URL}/trucks/all`, requestConfig);
     const { trucks, status } = await handleResponse(response);
     console.log('Response status:', status);
     return trucks;
