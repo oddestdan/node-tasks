@@ -34,9 +34,6 @@ router.get('/users/:id', (req, res) => {
     });
 });
 
-// Create User
-// Handled by 'register'
-
 // Update User Account info
 router.put('/users/:id', async (req, res) => {
   if (req.user.userId !== req.params.id) {

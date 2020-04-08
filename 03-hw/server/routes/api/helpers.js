@@ -1,9 +1,17 @@
-const { statuses, truckTypeInfo } = require('../../globals');
+const { statuses, truckTypeInfo, loadStatesArray } = require('../../globals');
 const { Truck } = require('../../models');
 
 // File storage and avatar image upload
 const fs = require('fs');
 const multer = require('multer');
+
+module.exports.getNextLoadState = (state) => {
+  const nextIndex = loadStatesArray.indexOf(state) + 1;
+  if (nextIndex <= loadStatesArray.length) {
+    return loadStatesArray[loadStatesArray.indexOf(state) + 1];
+  }
+  return new Error('Out of load states array boundaries!');
+};
 
 module.exports.checkUserIsOnLoad = async assigneeId => {
   const userAssignedTruck = await Truck.findOne({ assigneeId });

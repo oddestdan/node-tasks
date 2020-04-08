@@ -54,16 +54,14 @@ export default {
     return load;
   },
 
-  async updateState({ _id, data }) {
-    console.log({ _id, data });
+  async updateState(id) {
     const requestConfig = {
       method: 'PATCH',
-      headers: { ...auth(), 'Content-Type': 'application/json' },
-      body: JSON.stringify(data),
+      headers: auth(),
     };
 
     const response = await fetch(
-      `${BASE_URL}/loads/${_id}/state`,
+      `${BASE_URL}/loads/${id}/state`,
       requestConfig
     );
     const { load, status } = await handleResponse(response);
