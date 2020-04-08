@@ -9,7 +9,7 @@ const service = {
       body: JSON.stringify({ username, password }),
     };
 
-    const response = await fetch(`${BASE_URL}/login`, requestConfig);
+    const response = await fetch(`${BASE_URL}/auth/login`, requestConfig);
     const { user, status, token } = await handleResponse(response);
 
     if (token) {
@@ -34,7 +34,7 @@ const service = {
       body: JSON.stringify(userData),
     };
 
-    const response = await fetch(`${BASE_URL}/register`, requestConfig);
+    const response = await fetch(`${BASE_URL}/auth/register`, requestConfig);
     const { user, status } = await handleResponse(response);
     console.log('Response status:', status);
     return user;

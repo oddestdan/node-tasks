@@ -6,7 +6,7 @@ const { secret } = require('config').get('jwt');
 
 const { User } = require('../../models');
 
-router.post('/login', async (req, res) => {
+router.post('/auth/login', async (req, res) => {
   const { username, password } = req.body;
 
   try {
@@ -40,6 +40,34 @@ router.post('/login', async (req, res) => {
   } catch (error) {
     return res.status(500).json({ status: error.message });
   }
+});
+
+router.post('/auth/register', (req, res) => {
+  const { username, password, role } = req.body;
+  const userData = { username, password, role: role.toLowerCase() };
+
+  const validation = User.joiValidate(userData);
+  if (validation.error) {
+    return res.status(422).json({ status: validation.error.message });
+  }
+
+  const user = new User(userData);
+
+  user
+    .save()
+    .then(() => {
+      res.json({
+        status: 'New user created',
+        user
+      });
+    })
+    .catch(e => {
+      res.status(500).json({ status: e.message });
+    });
+
+  // TODO: Sign up and Sign in at the same time ?
+  // const jwtToken = jwt.sign(user, secret);
+  // res.json({ jwtToken });
 });
 
 module.exports = router;

@@ -9,9 +9,7 @@
               v-if="!isDriver"
               @click="handleCreateLoadClick"
               class="btn btn-link"
-            >
-              Create New Load
-            </button>
+            >Create New Load</button>
           </div>
           <section class="panel panel-success" v-if="loads.length">
             <table class="table table-striped">
@@ -29,21 +27,14 @@
                 <td>{{ load._id }}</td>
                 <td>{{ isDriver ? load.creatorId : load.assigneeId }}</td>
                 <td>{{ load.status }}</td>
-                <select
-                  v-if="isDriver"
-                  class="custom-select"
-                  name="state"
-                  v-model="load.state"
-                  @change="() => handleStateChange(load)"
-                >
-                  <option
-                    v-for="state in Object.values(loadStates)"
-                    :key="`${state}`"
-                    :value="state"
-                    >{{ state }}</option
-                  >
-                </select>
-                <td v-else>{{ load.state }}</td>
+                <td>
+                  {{ load.state || '-' }}
+                  <b-button
+                    v-if="isDriver && load.status === 'ASSIGNED'"
+                    @click="handleStateChange(load._id)"
+                    variant="link"
+                  >Update</b-button>
+                </td>
                 <td class="dimensions">
                   {{ load.dimensions['width'] }} x
                   {{ load.dimensions['height'] }} x
@@ -61,22 +52,20 @@
                   >
                 </td>
 
-                <td class="actions" v-if="load.status === 'NEW'">
-                  <button
-                    @click="() => handlePostLoadClick(load._id)"
-                    class="btn btn-link"
-                  >
-                    Post
-                  </button>
-                </td>
-                <td class="actions" v-if="load.status === 'NEW'">
-                  <button
-                    @click="() => handleDeleteLoadClick(load._id)"
-                    class="btn btn-link"
-                  >
-                    x
-                  </button>
-                </td>
+                <template v-if="load.status === 'NEW' && !isDriver">
+                  <td class="actions">
+                    <button
+                      @click="handlePostLoadClick(load._id)"
+                      class="btn btn-link"
+                    >Post</button>
+                  </td>
+                  <td class="actions">
+                    <button
+                      @click="handleDeleteLoadClick(load._id)"
+                      class="btn btn-link"
+                    >x</button>
+                  </td>
+                </template>
               </tr>
             </table>
 
@@ -96,7 +85,6 @@
 
 <script>
 import { mapState, mapActions } from 'vuex';
-import { loadStates } from '../globals';
 import LogsModal from '../components/LogsModal';
 // import Pagination from '../components/Pagination';
 
@@ -119,7 +107,6 @@ export default {
       user: state => state.user,
       isDriver: state => state.user.role === 'driver',
       loads: state => state.loads,
-      loadStates: () => loadStates,
     }),
   },
 
@@ -130,10 +117,8 @@ export default {
       this.$router.push('/loads/new');
     },
 
-    handleStateChange(load) {
-      const { _id, state } = load;
-      const data = { state };
-      this.updateLoadState({ _id, data });
+    handleStateChange(id) {
+      this.updateLoadState(id);
     },
 
     handlePostLoadClick(id) {
