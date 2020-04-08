@@ -6,6 +6,7 @@ const { User, Load, Truck } = require('../../models');
 const { statuses, loadStates } = require('../../globals');
 
 const {
+  getNextLoadState,
   findTruckCandidate,
   handleLoadsStatusFiltering,
   handleLoadsPagination,
@@ -106,7 +107,8 @@ router.patch('/loads/:id/post', async (req, res) => {
 
     load.assigneeId = truckCandidate.assigneeId;
     load.status = statuses.load['assigned'];
-    load.state = loadStates['erPickUp'];
+    load.state = getNextLoadState(load.state); // TODO: check
+    // load.state = loadStates['erPickUp'];
     load.logs = [
       ...load.logs,
       {
@@ -118,6 +120,7 @@ router.patch('/loads/:id/post', async (req, res) => {
 
     return res.json({
       status: 'Found an appropriate truck candidate for the load',
+      assigned_to: truckCandidate.assigneeId,
       load,
       truckCandidate,
     });
@@ -163,17 +166,19 @@ router.patch('/loads/:id/state', async (req, res) => {
   }
 
   try {
-    const { state } = req.body;
+    const load = await Load.findById(req.params.id);
+    const state = getNextLoadState(load.state);
 
-    const validation = Load.joiValidate({ state });
-    if (validation.error) {
-      return res.status(422).json({ status: validation.error.message });
+    console.log('STATUS: ', load.status);
+
+    if (load.status !== statuses.load['assigned']) {
+      return res
+        .status(400)
+        .json({ status: 'Load is not active' });
     }
 
-    // Update Load info
-    const load = await Load.findById(req.params.id);
+    // Check if load reached delivery destination
     if (state === loadStates['arDelivery']) {
-      // Load reached delivery destination
       load.status = statuses.load['shipped'];
 
       // Reset Truck availability
@@ -181,6 +186,8 @@ router.patch('/loads/:id/state', async (req, res) => {
       truck.status = statuses.truck['inService'];
       await truck.save();
     }
+
+    // Update Load info
     load.state = state;
     load.logs = [
       ...load.logs,
