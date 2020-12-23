@@ -36,6 +36,8 @@ mongoose
 app.use(cors());
 app.use(express.json());
 
+app.use('/api', require('./routes/api/aggr'));
+
 app.use('/api', require('./routes/api/weather'));
 app.use('/api', require('./routes/api/auth'));
 

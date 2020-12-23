@@ -169,9 +169,7 @@ router.patch('/loads/:id/state', async (req, res) => {
     console.log('STATUS: ', load.status);
 
     if (load.status !== statuses.load['assigned']) {
-      return res
-        .status(400)
-        .json({ status: 'Load is not active' });
+      return res.status(400).json({ status: 'Load is not active' });
     }
 
     // Check if load reached delivery destination
@@ -216,6 +214,47 @@ router.delete('/loads/:id', async (req, res) => {
   } catch (error) {
     res.status(500).json({ status: error.message });
   }
+});
+
+// // Get Load
+// router.get('/loads/:id', (req, res) => {
+//   Load.findById(req.params.id)
+//     .then((load) => res.json({ status: `Showing load ${load._id}`, load }))
+//     .catch((e) => {
+//       res.status(500).json({ status: e.message });
+//     });
+// });
+
+// Use Aggregation Pipeline to get
+// New loads with same creator and sort them by payload value
+router.get('/loads/aggregate', async (req, res) => {
+  // Load.aggregate(
+  //   [
+  //     // { $match: { status: statuses.load['new'] } },
+  //     { $group: { _id: '$creatorId', amount: '$payload' } }, // some: { $min: '$dimensions' }
+  //     { $sort: { amount: -1 } },
+  //     // { $project: {  } },
+  //     // { $limit: 10 },
+  //     // {
+  //     //   $lookup: {
+  //     //     from: 'users',
+  //     //     localField: 'creatorId',
+  //     //     foreignField: 'loadId',
+  //     //     as: 'loadCreators',
+  //     //   },
+  //     // },
+  //   ],
+  //   (err, result) => {
+  //     if (err) {
+  //       console.log(err);
+  //       return;
+  //     }
+  //     console.log(result);
+  //     res.json({ data: result });
+  //   }
+  // );
+
+  res.json({ data: 'test' });
 });
 
 // Generate PDF report of Load's logs
