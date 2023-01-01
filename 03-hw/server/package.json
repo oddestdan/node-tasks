@@ -15,7 +15,7 @@
     "@hapi/joi": "^17.1.1",
     "bcryptjs": "^2.4.3",
     "cloudinary": "^1.21.0",
-    "config": "^3.3.0",
+    "config": "^3.3.8",
     "cors": "^2.8.5",
     "express": "^4.17.1",
     "express-pino-logger": "^4.0.0",
